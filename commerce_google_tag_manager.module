@@ -77,6 +77,23 @@ function commerce_google_tag_manager_ecommerce_js($order) {
     }
   }
 
+  $products = array();
+  // Loop through the products on the order.
+  foreach ($order->commerce_line_items as $line_item) {
+
+    $properties = $line_item->getPropertyInfo();
+    if (isset($properties['commerce_product']) && !empty($line_item->value()->commerce_product[LANGUAGE_NONE][0]['product_id'])) {
+      // Build the item arguments.
+      $products[] = array(
+        'sku' => $line_item->commerce_product->sku->value(),
+        'name' => $line_item->commerce_product->title->value(),
+        'category' => '',
+        'price' => commerce_currency_amount_to_decimal($line_item->commerce_unit_price->amount->value(), $line_item->commerce_unit_price->currency_code->value()),
+        'quantity' => (int)$line_item->quantity->value(),
+      );
+    }
+  }
+
   // Build the transaction arguments.
   $transaction = array(
     'event' => 'trackTrans',
@@ -85,7 +102,7 @@ function commerce_google_tag_manager_ecommerce_js($order) {
     'transactionTotal' => commerce_currency_amount_to_decimal($order->commerce_order_total->amount->value(), $order->commerce_order_total->currency_code->value()),
     'transactionTax' => $tax_sum,
     'transactionShipping' => $shipping,
-
+    'transactionProducts' => $products
   );
 
   // Add the transaction line to the JS array.
