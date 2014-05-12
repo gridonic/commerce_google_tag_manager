@@ -9,7 +9,7 @@
  */
 function commerce_google_tag_manager_rules_action_info() {
   return array(
-    // Add rules action which sends the transaction code
+    // Add rules action which sends the transaction code.
     'commerce_google_tag_manager_send_order' => array(
       'label' => t('Send order to google analytics via GTM'),
       'parameter' => array(
@@ -19,7 +19,7 @@ function commerce_google_tag_manager_rules_action_info() {
         ),
       ),
       'callback' => array(
-        'execute' => 'commerce_google_tag_manager_send_order'
+        'execute' => 'commerce_google_tag_manager_send_order',
       ),
     ),
   );

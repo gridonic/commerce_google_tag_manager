@@ -9,19 +9,6 @@
  */
 
 /**
- * Implements hook_enable().
- */
-function commerce_google_tag_manager_enable() {
-  $weight = db_query("SELECT weight FROM {system} WHERE name = :module", array(':module' => 'google_tag'))->fetchField();
-
-  // Update the weight so its hooks get called after the actual GTM module.
-  db_update('system')
-          ->fields(array('weight' => max(1000, $weight + 1)))
-          ->condition('name', 'commerce_google_tag_manager')
-          ->execute();
-}
-
-/**
  * Build the e-commerce JS transaction.
  *
  * @param object $order
@@ -72,7 +59,7 @@ function commerce_google_tag_manager_ecommerce_js($order) {
         'name' => $line_item->commerce_product->title->value(),
         'category' => '',
         'price' => commerce_currency_amount_to_decimal($line_item->commerce_unit_price->amount->value(), $line_item->commerce_unit_price->currency_code->value()),
-        'quantity' => (int)$line_item->quantity->value(),
+        'quantity' => (int) $line_item->quantity->value(),
       );
     }
   }
@@ -89,7 +76,7 @@ function commerce_google_tag_manager_ecommerce_js($order) {
         'name' => $line_item->commerce_product->title->value(),
         'category' => '',
         'price' => commerce_currency_amount_to_decimal($line_item->commerce_unit_price->amount->value(), $line_item->commerce_unit_price->currency_code->value()),
-        'quantity' => (int)$line_item->quantity->value(),
+        'quantity' => (int) $line_item->quantity->value(),
       );
     }
   }
@@ -102,7 +89,7 @@ function commerce_google_tag_manager_ecommerce_js($order) {
     'transactionTotal' => commerce_currency_amount_to_decimal($order->commerce_order_total->amount->value(), $order->commerce_order_total->currency_code->value()),
     'transactionTax' => $tax_sum,
     'transactionShipping' => $shipping,
-    'transactionProducts' => $products
+    'transactionProducts' => $products,
   );
 
   // Add the transaction line to the JS array.
