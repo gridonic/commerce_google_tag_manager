@@ -1,1 +1,7 @@
 name = Commerce Google Tag Manager
+description = Enhances Google Tag Manager with transaction support for Drupal Commerce.
+package = Commerce (contrib)
+core = 7.x
+
+dependencies[] = commerce
+dependencies[] = google_tag
