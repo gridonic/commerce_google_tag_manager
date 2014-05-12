@@ -1,0 +1,125 @@
+<?php
+/**
+ * @file
+ * Adds the required Javascript to the checkout completion page to allow
+ * e-commerce statistics tracking through Google Tag Manager.
+ *
+ * Based on https://support.google.com/tagmanager/answer/3002596?hl=en
+ * and Commerce Google Analytics module.
+ */
+
+/**
+ * Implements hook_enable().
+ */
+function commerce_google_tag_manager_enable() {
+  $weight = db_query("SELECT weight FROM {system} WHERE name = :module", array(':module' => 'google_tag'))->fetchField();
+
+  // Update the weight so its hooks get called after the actual GTM module.
+  db_update('system')
+          ->fields(array('weight' => max(1000, $weight + 1)))
+          ->condition('name', 'commerce_google_tag_manager')
+          ->execute();
+}
+
+/**
+ * Build the e-commerce JS transaction.
+ *
+ * @param object $order
+ *   The fully loaded order object to convert into GA JS.
+ *
+ * @return string
+ *   The JS that should be added to the page footer.
+ */
+function commerce_google_tag_manager_ecommerce_js($order) {
+
+  $script = '';
+
+  if (!($order instanceof EntityMetadataWrapper)) {
+    $order = entity_metadata_wrapper('commerce_order', $order);
+  }
+
+  $tax_sum = 0;
+  if (module_exists('commerce_tax')) {
+    foreach (commerce_tax_rates() as $name => $tax_rate) {
+      if ($tax_rate['price_component']) {
+        $tax_component = commerce_price_component_load($order->commerce_order_total->value(), $tax_rate['price_component']);
+        // Some taxes may not have been applied.
+        if (isset($tax_component[0]['price']['amount'])) {
+          $tax_sum += commerce_currency_amount_to_decimal($tax_component[0]['price']['amount'], $tax_component[0]['price']['currency_code']);
+        }
+      }
+    }
+  }
+
+  $shipping = 0;
+  if (module_exists('commerce_shipping')) {
+    foreach ($order->commerce_line_items as $item) {
+      if ($item->type->value() == 'shipping') {
+        $shipping += commerce_currency_amount_to_decimal($item->commerce_total->amount->value(), $item->commerce_total->currency_code->value());
+      }
+    }
+  }
+
+  $products = array();
+  // Loop through the products on the order.
+  foreach ($order->commerce_line_items as $line_item) {
+
+    $properties = $line_item->getPropertyInfo();
+    if (isset($properties['commerce_product']) && !empty($line_item->value()->commerce_product[LANGUAGE_NONE][0]['product_id'])) {
+      // Build the item arguments.
+      $products[] = array(
+        'sku' => $line_item->commerce_product->sku->value(),
+        'name' => $line_item->commerce_product->title->value(),
+        'category' => '',
+        'price' => commerce_currency_amount_to_decimal($line_item->commerce_unit_price->amount->value(), $line_item->commerce_unit_price->currency_code->value()),
+        'quantity' => (int)$line_item->quantity->value(),
+      );
+    }
+  }
+
+  // Build the transaction arguments.
+  $transaction = array(
+    'event' => 'trackTrans',
+    'transactionId' => $order->order_id->value(),
+    'transactionAffiliation' => variable_get('site_name', ''),
+    'transactionTotal' => commerce_currency_amount_to_decimal($order->commerce_order_total->amount->value(), $order->commerce_order_total->currency_code->value()),
+    'transactionTax' => $tax_sum,
+    'transactionShipping' => $shipping,
+
+  );
+
+  // Add the transaction line to the JS array.
+  $script .= 'dataLayer = [' . drupal_json_encode($transaction) . '];';
+
+  return $script;
+}
+
+/**
+ * Callback for the rules action which creates the javascript.
+ *
+ * Uses the $order and stores the script in the session to inject it using
+ * hook_init on the next page request.
+ *
+ * @param object $order
+ *   The order object
+ */
+function commerce_google_tag_manager_send_order($order) {
+
+  // Add the javascript only when we are on the order complete page.
+  $script = commerce_google_tag_manager_ecommerce_js($order);
+  $_SESSION['commerce_google_tag_manager'] = $script;
+}
+
+/**
+ * Implements hook_init().
+ */
+function commerce_google_tag_manager_init() {
+  if (!empty($_SESSION['commerce_google_tag_manager'])) {
+    $script = $_SESSION['commerce_google_tag_manager'];
+    drupal_add_js($script, array(
+      'type' => 'inline',
+      'scope' => 'header', 'preprocess' => FALSE,
+      'weight' => 10));
+    unset($_SESSION['commerce_google_tag_manager']);
+  }
+}
