@@ -4,4 +4,5 @@ package = Commerce (contrib)
 core = 7.x
 
 dependencies[] = commerce
+dependencies[] = entity
 dependencies[] = google_tag

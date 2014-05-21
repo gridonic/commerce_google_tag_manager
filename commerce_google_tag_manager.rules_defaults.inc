@@ -9,7 +9,7 @@
  */
 function commerce_google_tag_manager_default_rules_configuration() {
   $rule = rules_reaction_rule();
-  $rule->label = 'Send transaction details via GTM on checkout completion';
+  $rule->label = t('Send transaction details via GTM on checkout completion');
   $rule->active = TRUE;
   $rule->event('commerce_checkout_complete')
           ->action('commerce_google_tag_manager_send_order', array('commerce_order:select' => 'commerce_order')

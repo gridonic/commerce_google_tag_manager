@@ -15,7 +15,7 @@
  *   The fully loaded order object to convert into GA JS.
  *
  * @return string
- *   The JS that should be added to the page footer.
+ *   The JS that should be added to the page header.
  */
 function commerce_google_tag_manager_ecommerce_js($order) {
 
@@ -52,7 +52,7 @@ function commerce_google_tag_manager_ecommerce_js($order) {
   foreach ($order->commerce_line_items as $line_item) {
 
     $properties = $line_item->getPropertyInfo();
-    if (isset($properties['commerce_product']) && !empty($line_item->value()->commerce_product[LANGUAGE_NONE][0]['product_id'])) {
+    if (isset($properties['commerce_product']) && !empty($line_item->commerce_product->getIdentifier())) {
       // Build the item arguments.
       $products[] = array(
         'sku' => $line_item->commerce_product->sku->value(),
@@ -69,7 +69,7 @@ function commerce_google_tag_manager_ecommerce_js($order) {
   foreach ($order->commerce_line_items as $line_item) {
 
     $properties = $line_item->getPropertyInfo();
-    if (isset($properties['commerce_product']) && !empty($line_item->value()->commerce_product[LANGUAGE_NONE][0]['product_id'])) {
+    if (isset($properties['commerce_product']) && !empty($line_item->commerce_product->getIdentifier())) {
       // Build the item arguments.
       $products[] = array(
         'sku' => $line_item->commerce_product->sku->value(),
@@ -102,7 +102,7 @@ function commerce_google_tag_manager_ecommerce_js($order) {
  * Callback for the rules action which creates the javascript.
  *
  * Uses the $order and stores the script in the session to inject it using
- * hook_init on the next page request.
+ * hook_page_build on the next page request.
  *
  * @param object $order
  *   The order object
@@ -115,15 +115,17 @@ function commerce_google_tag_manager_send_order($order) {
 }
 
 /**
- * Implements hook_init().
+ * Implements hook_page_build().
  */
-function commerce_google_tag_manager_init() {
+function commerce_google_tag_manager_page_build(&$page) {
+
   if (!empty($_SESSION['commerce_google_tag_manager'])) {
+    // data escaped via drupal_json_encode().
     $script = $_SESSION['commerce_google_tag_manager'];
-    drupal_add_js($script, array(
+    $page['page_top']['#attached']['js'][] = array(
       'type' => 'inline',
-      'scope' => 'header', 'preprocess' => FALSE,
-      'weight' => 10));
+      'data' => $script,
+    );
     unset($_SESSION['commerce_google_tag_manager']);
   }
 }
