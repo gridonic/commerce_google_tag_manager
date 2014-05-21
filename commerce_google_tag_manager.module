@@ -12,7 +12,7 @@
  * Build the e-commerce JS transaction.
  *
  * @param object $order
- *   The fully loaded order object to convert into GA JS.
+ *   The fully loaded order object to convert into transaction JS.
  *
  * @return string
  *   The JS that should be added to the page header.
@@ -50,34 +50,19 @@ function commerce_google_tag_manager_ecommerce_js($order) {
   $products = array();
   // Loop through the products on the order.
   foreach ($order->commerce_line_items as $line_item) {
-
     $properties = $line_item->getPropertyInfo();
-    if (isset($properties['commerce_product']) && !empty($line_item->commerce_product->getIdentifier())) {
-      // Build the item arguments.
-      $products[] = array(
-        'sku' => $line_item->commerce_product->sku->value(),
-        'name' => $line_item->commerce_product->title->value(),
-        'category' => '',
-        'price' => commerce_currency_amount_to_decimal($line_item->commerce_unit_price->amount->value(), $line_item->commerce_unit_price->currency_code->value()),
-        'quantity' => (int) $line_item->quantity->value(),
-      );
-    }
-  }
-
-  $products = array();
-  // Loop through the products on the order.
-  foreach ($order->commerce_line_items as $line_item) {
-
-    $properties = $line_item->getPropertyInfo();
-    if (isset($properties['commerce_product']) && !empty($line_item->commerce_product->getIdentifier())) {
-      // Build the item arguments.
-      $products[] = array(
-        'sku' => $line_item->commerce_product->sku->value(),
-        'name' => $line_item->commerce_product->title->value(),
-        'category' => '',
-        'price' => commerce_currency_amount_to_decimal($line_item->commerce_unit_price->amount->value(), $line_item->commerce_unit_price->currency_code->value()),
-        'quantity' => (int) $line_item->quantity->value(),
-      );
+    if (isset($properties['commerce_product'])) {
+      $product_id = $line_item->commerce_product->getIdentifier();
+      if(!empty($product_id)) {
+        // Build the item arguments.
+        $products[] = array(
+          'sku' => $line_item->commerce_product->sku->value(),
+          'name' => $line_item->commerce_product->title->value(),
+          'category' => '',
+          'price' => commerce_currency_amount_to_decimal($line_item->commerce_unit_price->amount->value(), $line_item->commerce_unit_price->currency_code->value()),
+          'quantity' => (int) $line_item->quantity->value(),
+        );
+      }
     }
   }
 
@@ -120,7 +105,7 @@ function commerce_google_tag_manager_send_order($order) {
 function commerce_google_tag_manager_page_build(&$page) {
 
   if (!empty($_SESSION['commerce_google_tag_manager'])) {
-    // data escaped via drupal_json_encode().
+    // Data escaped via drupal_json_encode().
     $script = $_SESSION['commerce_google_tag_manager'];
     $page['page_top']['#attached']['js'][] = array(
       'type' => 'inline',
