@@ -53,7 +53,7 @@ function commerce_google_tag_manager_ecommerce_js($order) {
     $properties = $line_item->getPropertyInfo();
     if (isset($properties['commerce_product'])) {
       $product_id = $line_item->commerce_product->getIdentifier();
-      if(!empty($product_id)) {
+      if (!empty($product_id)) {
         // Build the item arguments.
         $products[] = array(
           'sku' => $line_item->commerce_product->sku->value(),
