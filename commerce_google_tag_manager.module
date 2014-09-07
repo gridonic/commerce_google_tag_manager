@@ -49,20 +49,28 @@ function commerce_google_tag_manager_ecommerce_js($order) {
 
   $products = array();
   // Loop through the products on the order.
-  foreach ($order->commerce_line_items as $line_item) {
-    $properties = $line_item->getPropertyInfo();
+  foreach ($order->commerce_line_items as $line_item_wrapper) {
+    $properties = $line_item_wrapper->getPropertyInfo();
+    $product_data = array();
+
     if (isset($properties['commerce_product'])) {
-      $product_id = $line_item->commerce_product->getIdentifier();
+      $product_id = $line_item_wrapper->commerce_product->getIdentifier();
       if (!empty($product_id)) {
         // Build the item arguments.
-        $products[] = array(
-          'sku' => $line_item->commerce_product->sku->value(),
-          'name' => $line_item->commerce_product->title->value(),
+        $product_data = array(
+          'sku' => $line_item_wrapper->commerce_product->sku->value(),
+          'name' => $line_item_wrapper->commerce_product->title->value(),
           'category' => '',
-          'price' => commerce_currency_amount_to_decimal($line_item->commerce_unit_price->amount->value(), $line_item->commerce_unit_price->currency_code->value()),
-          'quantity' => (int) $line_item->quantity->value(),
+          'price' => commerce_currency_amount_to_decimal($line_item_wrapper->commerce_unit_price->amount->value(), $line_item_wrapper->commerce_unit_price->currency_code->value()),
+          'quantity' => (int) $line_item_wrapper->quantity->value(),
         );
       }
+    }
+
+    // Allow other modules add other types of products.
+    drupal_alter('commerce_google_tag_manager_product_data', $product_data, $line_item_wrapper, $order);
+    if ($product_data) {
+      $products[] = $product_data;
     }
   }
 
