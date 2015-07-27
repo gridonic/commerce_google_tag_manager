@@ -4,8 +4,7 @@
  * Adds the required Javascript to the checkout completion page to allow
  * e-commerce statistics tracking through Google Tag Manager.
  *
- * Based on https://support.google.com/tagmanager/answer/3002596?hl=en
- * and Commerce Google Analytics module.
+ * Based on Commerce Google Analytics module.
  */
 
 /**
@@ -24,6 +23,8 @@ function commerce_google_tag_manager_ecommerce_js($order) {
   if (!($order instanceof EntityMetadataWrapper)) {
     $order = entity_metadata_wrapper('commerce_order', $order);
   }
+
+  $datalayer_type = variable_get('commerce_google_tag_manager_datalayer_type', 'legacy');
 
   $tax_sum = 0;
   if (module_exists('commerce_tax')) {
@@ -57,13 +58,32 @@ function commerce_google_tag_manager_ecommerce_js($order) {
       $product_id = $line_item_wrapper->commerce_product->getIdentifier();
       if (!empty($product_id)) {
         // Build the item arguments.
-        $product_data = array(
-          'sku' => $line_item_wrapper->commerce_product->sku->value(),
-          'name' => $line_item_wrapper->commerce_product->title->value(),
-          'category' => '',
-          'price' => commerce_currency_amount_to_decimal($line_item_wrapper->commerce_unit_price->amount->value(), $line_item_wrapper->commerce_unit_price->currency_code->value()),
-          'quantity' => (int) $line_item_wrapper->quantity->value(),
-        );
+        $sku = $line_item_wrapper->commerce_product->sku->value();
+        $name = $line_item_wrapper->commerce_product->title->value();
+        $category = '';
+        $variant = commerce_product_type_get_name($line_item_wrapper->commerce_product->getBundle());
+        $price = commerce_currency_amount_to_decimal($line_item_wrapper->commerce_unit_price->amount->value(), $line_item_wrapper->commerce_unit_price->currency_code->value());
+        $quantity = (int) $line_item_wrapper->quantity->value();
+
+        if ($datalayer_type == 'enhanced') {
+          $product_data = array(
+            'id' => $sku,
+            'name' => $name,
+            'category' => $category,
+            'variant' => $variant,
+            'price' => $price,
+            'quantity' => $quantity,
+          );
+        }
+        else {
+          $product_data = array(
+            'sku' => $sku,
+            'name' => $name,
+            'category' => $category,
+            'price' => $price,
+            'quantity' => $quantity,
+          );
+        }
       }
     }
 
@@ -75,15 +95,40 @@ function commerce_google_tag_manager_ecommerce_js($order) {
   }
 
   // Build the transaction arguments.
-  $transaction = array(
-    'event' => 'trackTrans',
-    'transactionId' => $order->order_id->value(),
-    'transactionAffiliation' => variable_get('site_name', ''),
-    'transactionTotal' => commerce_currency_amount_to_decimal($order->commerce_order_total->amount->value(), $order->commerce_order_total->currency_code->value()),
-    'transactionTax' => $tax_sum,
-    'transactionShipping' => $shipping,
-    'transactionProducts' => $products,
-  );
+  $order_id = $order->order_id->value();
+  $order_number = $order->order_number->value() ? $order->order_number->value() : $order_id;
+  $order_currency_code = $order->commerce_order_total->currency_code->value();
+  $order_total = commerce_currency_amount_to_decimal($order->commerce_order_total->amount->value(), $order_currency_code);
+  $affiliation = variable_get('site_name', '');
+  if ($datalayer_type == 'enhanced') {
+    $transaction = array(
+      'event' => 'transactionComplete',
+      'ecommerce' => array(
+        'currencyCode' => $order_currency_code,
+        'purchase' => array(
+          'actionField' => array(
+            'id' => $order_number,
+            'affiliation' => $affiliation,
+            'revenue' => $order_total,
+            'tax' => $tax_sum,
+            'shipping' => $shipping,
+          ),
+          'products' => $products,
+        ),
+      ),
+    );
+  }
+  else {
+    $transaction = array(
+      'event' => 'trackTrans',
+      'transactionId' => $order_number,
+      'transactionAffiliation' => $affiliation,
+      'transactionTotal' => $order_total,
+      'transactionTax' => $tax_sum,
+      'transactionShipping' => $shipping,
+      'transactionProducts' => $products,
+    );
+  }
 
   // Allow other modules implement hook_commerce_google_tag_manager_transaction_data_alter.
   drupal_alter('commerce_google_tag_manager_transaction_data', $transaction, $order);
@@ -124,4 +169,42 @@ function commerce_google_tag_manager_page_build(&$page) {
     );
     unset($_SESSION['commerce_google_tag_manager']);
   }
+}
+
+/**
+ * Implementation of hook_form_FORM_ID_alter().
+ *
+ * Extends Google Tag module with ecommerce settings.
+ */
+function commerce_google_tag_manager_form_google_tag_settings_form_alter(&$form, &$form_state) {
+  $form['tabs']['ecommerce'] = commerce_google_tag_manager_ecommerce_fieldset($form_state);
+}
+
+/**
+ * Eocmmerce Fieldset builder for the module settings form.
+ */
+function commerce_google_tag_manager_ecommerce_fieldset(&$form_state) {
+  // Build form elements.
+  $fieldset = array(
+    '#type' => 'fieldset',
+    '#title' => t('Ecommerce'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#tree' => FALSE,
+  );
+
+  $options = array('legacy' => t('Ecommerce (legacy) - <a href="!url">documentation</a>', array('!url' => 'https://support.google.com/tagmanager/answer/3002596?hl=en')), 'enhanced' => t('Enhanced Ecommerce for Universal Analytics - <a href="!url">documentation</a>', array('!url' => 'https://developers.google.com/tag-manager/enhanced-ecommerce')));
+
+  $fieldset['commerce_google_tag_manager_datalayer_type'] = array(
+    '#type' => 'radios',
+    '#title' => t('Select Data Layer type'),
+    '#options' => $options,
+    '#default_value' => variable_get('commerce_google_tag_manager_datalayer_type', 'legacy'),
+  );
+
+  $fieldset['description'] = array(
+    '#markup' => t('For debugging you can use Chrome extension <a href="!url">Tag Assistant</a>.', array('!url' => 'https://chrome.google.com/webstore/detail/tag-assistant-by-google/kejbdjndbnbjgmefkgdddjlbokphdefk'))
+  );
+
+  return $fieldset;
 }
