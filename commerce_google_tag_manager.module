@@ -86,7 +86,7 @@ function commerce_google_tag_manager_ecommerce_js($order) {
   );
 
   // Allow other modules implement hook_commerce_google_tag_manager_transaction_data_alter.
-  drupal_alter('commerce_google_tag_manager_transaction_data', $transaction);
+  drupal_alter('commerce_google_tag_manager_transaction_data', $transaction, $order);
 
   // Add the transaction line to the JS array.
   $script .= 'dataLayer.push(' . drupal_json_encode($transaction) . ');';
