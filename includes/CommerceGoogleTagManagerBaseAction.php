@@ -9,28 +9,27 @@
 abstract class CommerceGoogleTagManagerBaseAction extends RulesActionHandlerBase {
 
   /**
-   * Returns the Action name
+   * Returns the commerce event's name to be sent.
+   *
    * @return string
    */
   abstract public function getCommerceEventName();
 
   /**
-   * Defines the action.
+   * Get the default Rule's info.
+   *
    * @return array
    */
-  abstract public function getInfo();
-
-  /**
-   * @return array
-   */
-  protected function getDefaultsInfo() {
+  protected static function getDefaultsInfo() {
     return array(
       'group' => t('Commerce Google-TagManager'),
+      'name' => static::class,
     );
   }
 
   /**
    * Builds and pushes the current commerce data.
+   *
    * @param array $commerceData
    */
   protected function pushCommerceData(array $commerceData) {

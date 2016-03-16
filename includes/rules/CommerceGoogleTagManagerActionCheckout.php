@@ -1,6 +1,12 @@
 <?php
 
+/**
+ * @file
+ * This file contains the "Send Checkout to GTM" action definition.
+ */
+
 class CommerceGoogleTagManagerActionCheckout extends CommerceGoogleTagManagerBaseAction {
+
   /**
    * Defines the action.
    *
