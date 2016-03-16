@@ -1,0 +1,52 @@
+<?php
+
+class CommerceGoogleTagManagerActionPurchase extends CommerceGoogleTagManagerBaseAction {
+
+  /**
+   * Defines the action.
+   *
+   * @return array
+   */
+  public static function getInfo() {
+    return self::getDefaultsInfo() + array(
+      'label' => t('Send "Purchase" event to google analytics via GTM'),
+      'parameter' => array(
+        'order' => array(
+          'type' => 'commerce_order',
+          'label' => t('Order in checkout'),
+        ),
+      ),
+    );
+  }
+
+  /**
+   * @return string
+   */
+  public function getCommerceEventName() {
+    return 'purchase';
+  }
+
+  /**
+   * Executes the action.
+   *
+   * @param $order
+   */
+  public function execute($order) {
+    $order = CommerceGoogleTagHelper::getWrappedOrder($order);
+
+    $productsData = CommerceGoogleTagHelper::getLineItemsData($order);
+    $orderData = CommerceGoogleTagHelper::getOrderData($order);
+    $currencyCode = $order->commerce_order_total->currency_code->value();
+
+    $data = array(
+      'currencyCode' => $currencyCode,
+      'purchase' => array(
+        'actionField' => $orderData,
+        'products' => $productsData
+      ),
+    );
+
+    $this->pushCommerceData($data);
+  }
+
+}
