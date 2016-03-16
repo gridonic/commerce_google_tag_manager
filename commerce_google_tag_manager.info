@@ -3,8 +3,11 @@ description = Enhances Google Tag Manager with transaction support for Drupal Co
 package = Commerce (contrib)
 core = 7.x
 
-configure = admin/config/system/google_tag
-
 dependencies[] = commerce
 dependencies[] = entity
 dependencies[] = google_tag
+
+files[] = includes/CommerceGoogleTagManagerHelper.php
+files[] = includes/CommerceGoogleTagManagerBaseAction.php
+
+files[] = includes/rules/CommerceGoogleTagManagerActionCheckout.php
