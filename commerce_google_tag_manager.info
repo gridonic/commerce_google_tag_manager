@@ -13,3 +13,4 @@ files[] = includes/CommerceGoogleTagManagerBaseAction.php
 files[] = includes/rules/CommerceGoogleTagManagerActionCheckout.php
 files[] = includes/rules/CommerceGoogleTagManagerActionPurchase.php
 files[] = includes/rules/CommerceGoogleTagManagerActionAddToCart.php
+files[] = includes/rules/CommerceGoogleTagManagerActionRemoveFromCart.php
