@@ -39,7 +39,7 @@ class CommerceGoogleTagManagerHelper {
    * @param EntityMetadataWrapper $order The Order object
    * @return array
    */
-  static function getOrderData(\EntityMetadataWrapper $order) {
+  static function getOrderData(\EntityMetadataWrapper $order, $event = NULL) {
     $tax_sum = 0;
     if (module_exists('commerce_tax')) {
       foreach (commerce_tax_rates() as $name => $tax_rate) {
@@ -69,13 +69,19 @@ class CommerceGoogleTagManagerHelper {
     $order_total = commerce_currency_amount_to_decimal($order->commerce_order_total->amount->value(), $order_currency_code);
     $affiliation = variable_get('site_name', '');
 
-    return array(
+    $order_data = array(
       'id'          => $order_number,
       'affiliation' => $affiliation,
       'revenue'     => $order_total,
       'tax'         => $tax_sum,
       'shipping'    => $shipping,
     );
+
+    // Allow other modules to alter this order data.
+    $context = array('order'  => $order, 'event' => $event);
+    drupal_alter('commerce_google_tag_manager_order_data', $order_data, $context);
+
+    return $order_data;
   }
 
 
@@ -85,7 +91,7 @@ class CommerceGoogleTagManagerHelper {
    * @param EntityMetadataWrapper $item The order Line-Item object.
    * @return array
    */
-  static function getLineItemData(\EntityMetadataWrapper $item) {
+  static function getLineItemData(\EntityMetadataWrapper $item, $event = NULL) {
     $properties = $item->getPropertyInfo();
 
     $product_data = NULL;
@@ -114,8 +120,9 @@ class CommerceGoogleTagManagerHelper {
           'quantity' => $quantity,
         );
 
-        // Allow other modules add other types of products.
-        drupal_alter('commerce_google_tag_manager_product_data', $product_data, $item, $order);
+        // Allow other modules to alter this product data.
+        $context = array('line-item'  => $item, 'event' => $event);
+        drupal_alter('commerce_google_tag_manager_line_item_data', $product_data, $context);
       }
     }
     return $product_data;
@@ -126,13 +133,13 @@ class CommerceGoogleTagManagerHelper {
    * @param $order
    * @return array
    */
-  static function getLineItemsData($order) {
+  static function getLineItemsData($order, $event = NULL) {
 
     $products = array();
 
     // Loop through the products on the order.
     foreach ($order->commerce_line_items as $line_item_wrapper) {
-      $products[] = self::getLineItemData($line_item_wrapper);
+      $products[] = self::getLineItemData($line_item_wrapper, $event);
     }
 
     return array_filter($products);

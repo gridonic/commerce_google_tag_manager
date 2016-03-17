@@ -38,8 +38,8 @@ class CommerceGoogleTagManagerActionPurchase extends CommerceGoogleTagManagerBas
   public function execute($order) {
     $order = CommerceGoogleTagManagerHelper::getWrappedOrder($order);
 
-    $productsData = CommerceGoogleTagManagerHelper::getLineItemsData($order);
-    $orderData = CommerceGoogleTagManagerHelper::getOrderData($order);
+    $productsData = CommerceGoogleTagManagerHelper::getLineItemsData($order, $this->getCommerceEventName());
+    $orderData = CommerceGoogleTagManagerHelper::getOrderData($order, $this->getCommerceEventName());
     $currencyCode = $order->commerce_order_total->currency_code->value();
 
     $data = array(

@@ -38,6 +38,10 @@ abstract class CommerceGoogleTagManagerBaseAction extends RulesActionHandlerBase
       'ecommerce' => $commerceData,
     );
 
+    $context = array('event' => $this->getCommerceEventName());
+    // Allow other modules to alter this data before sending to DataLayer
+    drupal_alter('commerce_google_tag_manager_commmerce_data', $data, $context);
+
     // Add the data line to the JS array.
     $_SESSION['commerce_google_tag_manager'][] = $script . 'dataLayer.push(' . drupal_json_encode($data) . ');';
   }

@@ -44,7 +44,7 @@ class CommerceGoogleTagManagerActionAddToCart extends CommerceGoogleTagManagerBa
   public function execute($item, $count) {
     $item = CommerceGoogleTagManagerHelper::getWrappedLineItem($item);
 
-    $productData = CommerceGoogleTagManagerHelper::getLineItemData($item);
+    $productData = CommerceGoogleTagManagerHelper::getLineItemData($item, $this->getCommerceEventName());
     $order = $item->order;
     $currencyCode = $order->commerce_order_total->currency_code->value();
 
