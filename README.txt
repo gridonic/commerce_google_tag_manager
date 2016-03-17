@@ -2,14 +2,21 @@ INTRODUCTION
 ------------
 
 This is a contribution to Drupal Commerce. This module adds the possibility
-to send the order data to the Google Tag Manager service.
+to send the order and line-items data to the Google Tag Manager service.
+
+Since version 2.x this module only integrates the "Enhanced Commerce" event
+format for Google Tag Manager.
+
 
 REQUIREMENTS
 ------------
 
 This module requires the following modules:
+
+ * Rules (https://drupal.org/project/rules)
  * Commerce (https://drupal.org/project/commerce)
- * GoogleTagManager (https://drupal.org/project/google_tag)
+ * Google TagManager (https://drupal.org/project/google_tag)
+ * Datalayer (https://drupal.org/project/datalayer)
 
 INSTALLATION
 ------------
@@ -27,5 +34,4 @@ TROUBLESHOOTING
 MAINTAINERS
 -----------
 
-Current maintainer:
- * Petr Parimucha (parisek) - https://drupal.org/user/163839/
+See list of contributors here: https://www.drupal.org/node/2263083/committers
