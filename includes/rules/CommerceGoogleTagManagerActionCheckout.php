@@ -48,9 +48,10 @@ class CommerceGoogleTagManagerActionCheckout extends CommerceGoogleTagManagerBas
    * @param string $option Any checkout action related to the step.
    */
   public function execute($order, $step = null, $option = null) {
-    $order = CommerceGoogleTagHelper::getWrappedOrder($order);
-    $productsData = CommerceGoogleTagHelper::getLineItemsData($order);
-    $orderData = CommerceGoogleTagHelper::getOrderData($order);
+    $order = CommerceGoogleTagManagerHelper::getWrappedOrder($order);
+
+    $productsData = CommerceGoogleTagManagerHelper::getLineItemsData($order);
+    $orderData = CommerceGoogleTagManagerHelper::getOrderData($order);
     $currencyCode = $order->commerce_order_total->currency_code->value();
 
     $data = array(
@@ -66,6 +67,6 @@ class CommerceGoogleTagManagerActionCheckout extends CommerceGoogleTagManagerBas
     );
 
     // Push the commerce-data.
-    $this->pushJSData($data);
+    $this->pushCommerceData($data);
   }
 }
