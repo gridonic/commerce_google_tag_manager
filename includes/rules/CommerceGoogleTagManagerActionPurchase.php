@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @file
+ * This file contains the "Send the Purchase event to GTM" action definition.
+ */
 class CommerceGoogleTagManagerActionPurchase extends CommerceGoogleTagManagerBaseAction {
 
   /**
@@ -29,7 +33,7 @@ class CommerceGoogleTagManagerActionPurchase extends CommerceGoogleTagManagerBas
   /**
    * Executes the action.
    *
-   * @param $order
+   * @param array $order The order being purchased
    */
   public function execute($order) {
     $order = CommerceGoogleTagHelper::getWrappedOrder($order);

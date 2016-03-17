@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @file
+ * This file contains the "Send Add To Cart event to GTM" action definition.
+ */
 class CommerceGoogleTagManagerActionAddToCart extends CommerceGoogleTagManagerBaseAction {
 
   /**
@@ -34,8 +38,8 @@ class CommerceGoogleTagManagerActionAddToCart extends CommerceGoogleTagManagerBa
   /**
    * Executes the action.
    *
-   * @param $item
-   * @param string $count
+   * @param array $item The Line Item of the order
+   * @param string $count Number of items added to the order
    */
   public function execute($item, $count) {
     $item = CommerceGoogleTagHelper::getWrappedOrder($item);

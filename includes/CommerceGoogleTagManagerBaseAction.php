@@ -1,10 +1,8 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: ema
- * Date: 16/03/16
- * Time: 13:48
+ * @file
+ * This file contains the base class for CommerceGoogleTagManager actions.
  */
 abstract class CommerceGoogleTagManagerBaseAction extends RulesActionHandlerBase {
 

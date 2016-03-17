@@ -1,9 +1,16 @@
 <?php
 
-class CommerceGoogleTagHelper {
+/**
+ * @file
+ * This file contains the helper class CommerceGoogleTagManagerHelper.
+ */
+
+class CommerceGoogleTagManagerHelper {
 
   /**
-   * @param $order
+   * Wraps the give order, if needed, to a EntityMetadataWrapper object.
+   *
+   * @param array|stdClass $order The Order object or array
    * @return \EntityMetadataWrapper
    */
   static function getWrappedOrder($order) {
@@ -14,7 +21,9 @@ class CommerceGoogleTagHelper {
   }
 
   /**
-   * @param $item
+   * Wraps the give line-item, if needed, to a EntityMetadataWrapper object.
+   *
+   * @param array|stdClass $item The LineItem object or array
    * @return \EntityMetadataWrapper
    */
   static function getWrappedLineItem($item) {
@@ -25,7 +34,9 @@ class CommerceGoogleTagHelper {
   }
 
   /**
-   * @param $order
+   * Gets an array-based representation of the given Order.
+   *
+   * @param EntityMetadataWrapper $order The Order object
    * @return array
    */
   static function getOrderData(\EntityMetadataWrapper $order) {
@@ -69,7 +80,9 @@ class CommerceGoogleTagHelper {
 
 
   /**
-   * @param $item
+   * Gets an array-based representation of the given Line Item.
+
+   * @param EntityMetadataWrapper $item The order Line-Item object.
    * @return array
    */
   static function getLineItemData(\EntityMetadataWrapper $item) {

@@ -2,9 +2,8 @@
 
 /**
  * @file
- * This file contains the "Send Checkout to GTM" action definition.
+ * This file contains the "Send Checkout event to GTM" action definition.
  */
-
 class CommerceGoogleTagManagerActionCheckout extends CommerceGoogleTagManagerBaseAction {
 
   /**
@@ -44,9 +43,9 @@ class CommerceGoogleTagManagerActionCheckout extends CommerceGoogleTagManagerBas
   /**
    * Executes the action.
    *
-   * @param $order
-   * @param string $step
-   * @param string $option
+   * @param array $order The Order being checked out
+   * @param string $step The checkout step
+   * @param string $option Any checkout action related to the step.
    */
   public function execute($order, $step = null, $option = null) {
     $order = CommerceGoogleTagHelper::getWrappedOrder($order);
