@@ -45,7 +45,7 @@ function hook_commerce_google_tag_manager_order_data_alter(&$order_data, $contex
 function hook_commerce_google_tag_manager_commmerce_data_alter(&$data, $context) {
   // If we're sending a "Checkout" event,
   if ($context['event'] == 'checkout') {
-    // Remove the 'order' data
-    unset($data['ecommerce']['order']);
+    // Change the 'option' data
+    $data['ecommerce']['checkout']['actionField']['option'] = 'Overwritten Option';
   }
 }

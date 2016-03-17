@@ -51,7 +51,6 @@ class CommerceGoogleTagManagerActionCheckout extends CommerceGoogleTagManagerBas
     $order = CommerceGoogleTagManagerHelper::getWrappedOrder($order);
 
     $productsData = CommerceGoogleTagManagerHelper::getLineItemsData($order, $this->getCommerceEventName());
-    $orderData = CommerceGoogleTagManagerHelper::getOrderData($order, $this->getCommerceEventName());
     $currencyCode = $order->commerce_order_total->currency_code->value();
 
     $data = array(
@@ -61,7 +60,6 @@ class CommerceGoogleTagManagerActionCheckout extends CommerceGoogleTagManagerBas
           'step' => $step,
           'option' => $option,
         ),
-        'order' => $orderData,
         'products' => $productsData
       ),
     );
