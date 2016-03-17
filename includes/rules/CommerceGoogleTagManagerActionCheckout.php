@@ -56,13 +56,17 @@ class CommerceGoogleTagManagerActionCheckout extends CommerceGoogleTagManagerBas
     $data = array(
       'currencyCode' => $currencyCode,
       'checkout' => array(
-        'actionField' => array(
-          'step' => $step,
-          'option' => $option,
-        ),
         'products' => $productsData
       ),
     );
+
+    if (!is_null($step)) {
+      $data['actionField']['step'] = $step;
+    }
+
+    if (!is_null($option)) {
+      $data['actionField']['option'] = $option;
+    }
 
     // Push the commerce-data.
     $this->pushCommerceData($data);
