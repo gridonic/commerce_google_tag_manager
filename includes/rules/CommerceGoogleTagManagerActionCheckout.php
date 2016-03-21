@@ -61,11 +61,11 @@ class CommerceGoogleTagManagerActionCheckout extends CommerceGoogleTagManagerBas
     );
 
     if (!is_null($step)) {
-      $data['actionField']['step'] = $step;
+      $data['checkout']['actionField']['step'] = $step;
     }
 
     if (!is_null($option)) {
-      $data['actionField']['option'] = $option;
+      $data['checkout']['actionField']['option'] = $option;
     }
 
     // Push the commerce-data.
