@@ -1,0 +1,6 @@
+name = Commerce Google Tag Manager - Example
+description = Examples set of Rules for Commerce Google Tag Manager module.
+package = Commerce (contrib)
+core = 7.x
+
+dependencies[] = commerce_google_tag_manager
