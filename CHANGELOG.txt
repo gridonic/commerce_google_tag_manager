@@ -1,0 +1,20 @@
+7.x-2.x, xxxx-xx-xx
+-------------------
+
+7.x-2.0-rc2, 2016-04-19
+-------------------
+- Create default Rules reactions.
+
+7.x-2.0-rc1, 2016-03-21
+-----------------------
+- Wrong structure in "Checkout" event.
+- Added "Remove from Cart" action.
+- Avoid displaying empty values in ActionField data.
+- Fixed "Checkout" event (and hook documentation): stick to Google TagManager example https://developers.google.com/tag-manager/enhanced-ecommerce#checkoutstep).
+- Added hooks and API documentation.
+- Updated readme.
+- Fixed action event sending.
+- Added classes documentation.
+- Added Purchase and AddToCart actions.
+- Added documentation.
+- Preliminary refactoring of Rules loading and execution.
