@@ -58,11 +58,20 @@ function commerce_google_tag_manager_example_default_rules_configuration() {
     "LABEL" : "Push GoogleTag Checkout-state-Changed dataLayer",
     "PLUGIN" : "reaction rule",
     "OWNER" : "rules",
-    "TAGS" : [ "Commerce Google Tag Manager", "Commerce Checkout" ],
-    "REQUIRES" : [ "commerce_google_tag_manager", "entity" ],
+    "TAGS" : [ "Commerce Checkout", "Commerce Google Tag Manager" ],
+    "REQUIRES" : [ "rules", "commerce_google_tag_manager", "entity" ],
     "ON" : { "commerce_order_update" : [] },
+    "IF" : [
+      { "data_is" : { "data" : [ "commerce-order:state" ], "value" : "checkout" } },
+      { "NOT data_is" : { "data" : [ "commerce-order:status" ], "value" : "checkout_complete" } },
+      { "NOT data_is" : {
+          "data" : [ "commerce-order:status" ],
+          "value" : [ "commerce-order-unchanged:status" ]
+        }
+      }
+    ],
     "DO" : [
-      { "CommerceGoogleTagManagerActionCheckout" : { "order" : [ "commerce-order" ], "step" : [ "commerce-order:state" ] } }
+      { "CommerceGoogleTagManagerActionCheckout" : { "order" : [ "commerce-order" ], "step" : [ "commerce-order:status" ] } }
     ]
   }
 }');

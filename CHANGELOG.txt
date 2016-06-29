@@ -1,5 +1,6 @@
 7.x-2.x, xxxx-xx-xx
 -------------------
+- Updated default Rules reactions
 - Add a Hook to alter aggregated data, just before pushing to the Datalayer
 
 7.x-2.0-rc2, 2016-04-19
