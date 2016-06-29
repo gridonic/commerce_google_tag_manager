@@ -23,12 +23,18 @@ function commerce_google_tag_manager_page_build(&$page) {
     return;
   }
 
-  foreach ($_SESSION['commerce_google_tag_manager'] as $key => $script) {
+  $data = &$_SESSION['commerce_google_tag_manager'];
+
+  // Allow other modules to alter aggregated event-data just before pushing to
+  // the DataLayer.
+  drupal_alter('commerce_google_tag_manager_commerce_data_aggregated', $data);
+
+  foreach ($data as $key => $script) {
     // Data escaped via drupal_json_encode().
     $page['page_top']['#attached']['js'][] = array(
       'type' => 'inline',
       'data' => $script,
     );
-    unset($_SESSION['commerce_google_tag_manager'][$key]);
+    unset($data[$key]);
   }
 }
