@@ -1,0 +1,17 @@
+services:
+  commerce_gtm_enhanced_ecommerce.event_tracker:
+    class: Drupal\commerce_gtm_enhanced_ecommerce\EventTrackerService
+    arguments: ['@commerce_gtm_enhanced_ecommerce.event_storage', '@event_dispatcher']
+  commerce_gtm_enhanced_ecommerce.event_storage:
+    class: Drupal\commerce_gtm_enhanced_ecommerce\EventStorageService
+    arguments: ['@request_stack', '@event_dispatcher']
+  commerce_gtm_enhanced_ecommerce.commerce_events_subscriber:
+    class: Drupal\commerce_gtm_enhanced_ecommerce\EventSubscriber\CommerceEventsSubscriber
+    arguments: ['@commerce_gtm_enhanced_ecommerce.event_tracker']
+    tags:
+    - { name: 'event_subscriber' }
+  commerce_gtm_enhanced_ecommerce.kernel_events_subscriber:
+    class: Drupal\commerce_gtm_enhanced_ecommerce\EventSubscriber\KernelEventsSubscriber
+    arguments: ['@commerce_gtm_enhanced_ecommerce.event_tracker', '@current_route_match', '@commerce_checkout.checkout_order_manager']
+    tags:
+    - { name: 'event_subscriber' }

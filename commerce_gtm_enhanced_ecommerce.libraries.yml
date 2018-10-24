@@ -1,0 +1,8 @@
+commerce_gtm_enhanced_ecommerce:
+  version: VERSION
+  js:
+    js/commerce_gtm_enhanced_ecommerce.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings

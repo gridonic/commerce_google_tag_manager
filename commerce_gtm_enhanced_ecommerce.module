@@ -1,0 +1,41 @@
+<?php
+
+/**
+ * @file
+ * Module file for the commerce_gtm_enhanced_ecommerce module.
+ */
+
+use Drupal\Core\Cache\CacheableMetadata;
+
+/**
+ * Pass module configuration to javascript.
+ *
+ * Implements hook_page_attachments().
+ */
+function commerce_gtm_enhanced_ecommerce_page_attachments(array &$page) {
+  $page['#attached']['library'][] = 'commerce_gtm_enhanced_ecommerce/commerce_gtm_enhanced_ecommerce';
+  $page['#attached']['drupalSettings']['commerceGtmEnhancedEcommerce'] = [
+    'eventsUrl' => Drupal::service('url_generator')->generateFromRoute('commerce_gtm_enhanced_ecommerce.events'),
+    'dataLayerVariable' => Drupal::config('google_tag.settings')->get('data_layer') ?: 'dataLayer',
+  ];
+
+  // Add cache metadata to the render array.
+  $cache = new CacheableMetadata();
+  $cache->addCacheableDependency(Drupal::config('google_tag.settings'));
+  $cache->applyTo($page);
+}
+
+/**
+ * Track Enhanced Ecommerce product detail view.
+ *
+ * Implements hook_entity_view().
+ */
+function commerce_gtm_enhanced_ecommerce_commerce_product_view(&$build) {
+  if (Drupal::request()->getMethod() === 'GET' && $build['#view_mode'] === 'full') {
+    /** @var \Drupal\commerce_product\Entity\ProductInterface $product */
+    $product = $build['#commerce_product'];
+    /** @var \Drupal\commerce_gtm_enhanced_ecommerce\EventTrackerService $event_tracker */
+    $event_tracker = Drupal::service('commerce_gtm_enhanced_ecommerce.event_tracker');
+    $event_tracker->productDetailViews([$product->getDefaultVariation()]);
+  }
+}

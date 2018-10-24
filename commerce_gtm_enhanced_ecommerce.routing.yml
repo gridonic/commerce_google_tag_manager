@@ -1,0 +1,10 @@
+commerce_gtm_enhanced_ecommerce.events:
+  path: 'commerce_gtm_enhanced_ecommerce'
+  defaults:
+    _controller: '\Drupal\commerce_gtm_enhanced_ecommerce\Controller\EventsController::getEvents'
+    _disable_route_normalizer: 'TRUE'
+  methods: [GET]
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: 'TRUE'

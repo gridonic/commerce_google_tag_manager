@@ -1,0 +1,8 @@
+name: 'Enhanced Ecommerce for Google Tag Manager'
+description: 'Provides Commerce integration for Enhanced Ecommerce events via Google Tag Manager'
+package: 'Commerce (contrib)'
+core: 8.x
+dependencies:
+- commerce
+- google_tag
+type: module
