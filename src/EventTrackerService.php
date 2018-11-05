@@ -362,7 +362,7 @@ class EventTrackerService {
    * @return float
    */
   private function calculateShipping(OrderInterface $order) {
-    if ($order->get('shipments') && !$order->get('shipments')->isEmpty()) {
+    if ($order->hasField('shipments') && !$order->get('shipments')->isEmpty()) {
       $total = 0;
       foreach ($order->get('shipments')->referencedEntities() as $shipment) {
         /** @var \Drupal\commerce_shipping\Entity\ShipmentInterface $shipment */
@@ -383,7 +383,7 @@ class EventTrackerService {
    * @return string
    */
   private function getCouponCode(OrderInterface $order) {
-    if ($order->get('coupons')->isEmpty()) {
+    if (!$order->hasField('coupons') || $order->get('coupons')->isEmpty()) {
       return '';
     }
 
