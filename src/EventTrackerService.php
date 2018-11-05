@@ -383,7 +383,7 @@ class EventTrackerService {
    * @return string
    */
   private function getCouponCode(OrderInterface $order) {
-    if ($order->get('coupons')->isEmpty()) {
+    if (!$order->hasField('coupons') || $order->get('coupons')->isEmpty()) {
       return '';
     }
 
