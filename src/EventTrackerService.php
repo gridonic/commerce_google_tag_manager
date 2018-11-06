@@ -247,7 +247,7 @@ class EventTrackerService {
         'purchase' => [
           'actionField' => [
             'id' => $order->getOrderNumber(),
-            'affilation' => $order->getStore()->getName(),
+            'affiliation' => $order->getStore()->getName(),
             'revenue' => $this->formatPrice((float) $order->getTotalPrice()->getNumber()),
             'shipping' => $this->formatPrice($this->calculateShipping($order)),
             'coupon' => $this->getCouponCode($order),
