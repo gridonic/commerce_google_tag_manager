@@ -13,9 +13,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 /**
  * Track different events from Google's Enhanced Ecommerce.
  *
- * The events are stored in the session and pushed to Google Tag Manager
- * via Data Layer upon the next page view.
- *
  * @see https://developers.google.com/tag-manager/enhanced-ecommerce
  *
  * @package Drupal\commerce_gtm_enhanced_ecommerce
@@ -156,15 +153,11 @@ class EventTrackerService {
    *   The removed quantity.
    */
   public function removeFromCart(OrderItemInterface $orderItem, $quantity) {
-    $product = $this->buildProductFromOrderItem($orderItem);
-
     $data = [
       'event' => self::EVENT_REMOVE_CART,
       'ecommerce' => [
         'remove' => [
-          'products' => [
-            array_merge($product->toArray(), ['quantity' => $quantity]),
-          ],
+          'products' => $this->buildProductsFromOrderItems([$orderItem]),
         ],
       ],
     ];
@@ -233,14 +226,6 @@ class EventTrackerService {
    *   A commerce order entity.
    */
   public function purchase(OrderInterface $order) {
-    $productsData = array_map(function($orderItem) {
-      /** @var $orderItem OrderItemInterface */
-      return array_merge(
-        $this->buildProductFromOrderItem($orderItem)->toArray(),
-        ['quantity' => (int) $orderItem->getQuantity()]
-      );
-    }, $order->getItems());
-
     $data = [
       'event' => self::EVENT_PURCHASE,
       'ecommerce' => [
@@ -252,7 +237,7 @@ class EventTrackerService {
             'shipping' => $this->formatPrice($this->calculateShipping($order)),
             'coupon' => $this->getCouponCode($order),
           ],
-          'products' => $productsData,
+          'products' => $this->buildProductsFromOrderItems($order->getItems()),
         ],
       ],
     ];
@@ -268,7 +253,7 @@ class EventTrackerService {
    *   A commerce order item.
    *
    * @return \Drupal\commerce_gtm_enhanced_ecommerce\Product
-   *   The GTM product.
+   *   The Enhanced Ecommerce product.
    */
   private function buildProductFromOrderItem(OrderItemInterface $orderItem) {
     $purchasedEntity = $orderItem->getPurchasedEntity();
@@ -277,8 +262,7 @@ class EventTrackerService {
       $product = $this->buildProductFromProductVariation($purchasedEntity);
     } else {
       // The purchased entity is not a product variation.
-      $product = new Product();
-      $product
+      $product = (new Product())
         ->setName($orderItem->getTitle())
         ->setId($purchasedEntity->id())
         ->setPrice($this->formatPrice((float) $orderItem->getTotalPrice()->getNumber()));
@@ -319,9 +303,10 @@ class EventTrackerService {
    */
   private function buildProductsFromOrderItems(array $orderItems) {
     return array_map(function($orderItem) {
-      return $this
-        ->buildProductFromOrderItem($orderItem)
-        ->toArray();
+      return array_merge(
+        $this->buildProductFromOrderItem($orderItem)->toArray(),
+        ['quantity' => (int) $orderItem->getQuantity()]
+      );
     }, $orderItems);
   }
 
