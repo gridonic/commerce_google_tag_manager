@@ -351,7 +351,7 @@ class EventTrackerService {
       return '0';
     }
 
-    return number_format((float) $price, 2);
+    return number_format((float) $price, 2, '.', '');
   }
 
   /**
