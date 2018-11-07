@@ -6,6 +6,7 @@
   "license": "GPL-2.0+",
   "keywords": ["drupal", "commerce", "google tag manager", "enhanced ecommerce"],
   "require": {
+    "drupal/core": "^8.5",
     "drupal/commerce": "~2",
     "drupal/google_tag": "^1.1"
   }

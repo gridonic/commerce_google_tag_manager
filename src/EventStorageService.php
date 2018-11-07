@@ -4,22 +4,16 @@ namespace Drupal\commerce_gtm_enhanced_ecommerce;
 
 use Drupal\commerce_gtm_enhanced_ecommerce\Event\AlterEventDataEvent;
 use Drupal\commerce_gtm_enhanced_ecommerce\Event\EnhancedEcommerceEvents;
+use Drupal\Core\TempStore\PrivateTempStoreFactory;
+use Drupal\Core\TempStore\TempStoreException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Stores all tracked Enhanced Ecommerce events in the session.
+ * Stores all tracked Enhanced Ecommerce events in a private tempstore.
  *
  * @package Drupal\commerce_gtm_enhanced_ecommerce
  */
 class EventStorageService {
-
-  const SESSION_KEY = 'commerce_gtm_enhanced_ecommerce_events';
-
-  /**
-   * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
-   */
-  private $session;
 
   /**
    * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
@@ -27,11 +21,16 @@ class EventStorageService {
   private $eventDispatcher;
 
   /**
-   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+   * @var \Drupal\Core\TempStore\PrivateTempStore
+   */
+  private $tempStore;
+
+  /**
+   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $privateTempStoreFactory
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
    */
-  public function __construct(RequestStack $requestStack, EventDispatcherInterface $eventDispatcher) {
-    $this->session = $requestStack->getCurrentRequest()->getSession();
+  public function __construct(PrivateTempStoreFactory $privateTempStoreFactory, EventDispatcherInterface $eventDispatcher) {
+    $this->tempStore = $privateTempStoreFactory->get('commerce_gtm_enhanced_ecommerce');
     $this->eventDispatcher = $eventDispatcher;
   }
 
@@ -44,28 +43,30 @@ class EventStorageService {
    * @return array
    */
   public function getEvents() {
-    return array_values($this->session->get(self::SESSION_KEY)) ?? [];
+    $events = $this->tempStore->get('events') ?: [];
+
+    return array_values($events);
   }
 
   /**
    * Add event data to the storage.
    *
    * Computes a hash from the given event data to prevent storing
-   * the same event multiple times.
+   * the exact same event multiple times.
    *
    * @param array $eventData
    *
    * @return $this
    */
   public function addEvent(array $eventData) {
-    $events = $this->session->get(self::SESSION_KEY) ?? [];
+    $events = (array) $this->tempStore->get('events') ?: [];
     $hash = $this->hash($eventData);
 
     if (!isset($events[$hash])) {
       $event = new AlterEventDataEvent($eventData);
       $this->eventDispatcher->dispatch(EnhancedEcommerceEvents::ALTER_EVENT_DATA, $event);
       $events[$this->hash($eventData)] = $event->getEventData();
-      $this->session->set(self::SESSION_KEY, $events);
+      $this->tempStore->set('events', $events);
     }
 
     return $this;
@@ -74,12 +75,10 @@ class EventStorageService {
   /**
    * Delete all stored event data.
    *
-   * @return $this
+   * @return bool
    */
   public function flush() {
-    $this->session->set(self::SESSION_KEY, []);
-
-    return $this;
+    return $this->tempStore->delete('events');
   }
 
   /**
