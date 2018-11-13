@@ -17,24 +17,6 @@ loads all stored events via ajax and pushes them to Google Tag Manager via data 
 
 The module offers a service to track other Enhanced Ecommerce events such as _Product Impressions_.
 
-## Installation
-
-Since this module is not yet released on Drupal, we need to tell Composer
-where to find it. Add the following entry in the `repositories` section 
-of your `composer.json` located in the Drupal root directory:
-
-```
-{
-    "type": "vcs",
-    "url": "https://github.com/gridonic/commerce_gtm_enhanced_ecommerce"
-}
-```
-
-Then execute `composer require gridonic/commerce_gtm_enhanced_ecommerce`.
-
-This should install the module to `web/modules/contrib/commerce_gtm_enhanced_ecommerce`.
-Enable the module in Drupal, e.g. via `drush en commerce_gtm_enhanced_ecommerce`.
-
 ## Configuration
 
 The module does (currently) not offer any configuration options. The configuration is
