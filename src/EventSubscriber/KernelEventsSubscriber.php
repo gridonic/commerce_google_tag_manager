@@ -1,9 +1,9 @@
 <?php
 
-namespace Drupal\commerce_gtm_enhanced_ecommerce\EventSubscriber;
+namespace Drupal\commerce_google_tag_manager\EventSubscriber;
 
 use Drupal\commerce_checkout\CheckoutOrderManagerInterface;
-use Drupal\commerce_gtm_enhanced_ecommerce\EventTrackerService;
+use Drupal\commerce_google_tag_manager\EventTrackerService;
 use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -12,13 +12,11 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Event handler for Kernel events.
- *
- * @package Drupal\commerce_gtm_enhanced_ecommerce\EventSubscriber
  */
 class KernelEventsSubscriber implements EventSubscriberInterface {
 
   /**
-   * @var \Drupal\commerce_gtm_enhanced_ecommerce\EventTrackerService
+   * @var \Drupal\commerce_google_tag_manager\EventTrackerService
    */
   private $eventTrackerService;
 
@@ -33,7 +31,7 @@ class KernelEventsSubscriber implements EventSubscriberInterface {
   private $checkoutOrderManager;
 
   /**
-   * @param \Drupal\commerce_gtm_enhanced_ecommerce\EventTrackerService $eventTrackerService
+   * @param \Drupal\commerce_google_tag_manager\EventTrackerService $eventTrackerService
    * @param \Drupal\Core\Routing\RouteMatchInterface $routeMatch
    * @param \Drupal\commerce_checkout\CheckoutOrderManagerInterface $checkoutOrderManager
    */

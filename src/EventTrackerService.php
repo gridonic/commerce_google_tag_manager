@@ -1,10 +1,10 @@
 <?php
 
-namespace Drupal\commerce_gtm_enhanced_ecommerce;
+namespace Drupal\commerce_google_tag_manager;
 
-use Drupal\commerce_gtm_enhanced_ecommerce\Event\AlterProductEvent;
-use Drupal\commerce_gtm_enhanced_ecommerce\Event\EnhancedEcommerceEvents;
-use Drupal\commerce_gtm_enhanced_ecommerce\Event\TrackCheckoutStepEvent;
+use Drupal\commerce_google_tag_manager\Event\AlterProductEvent;
+use Drupal\commerce_google_tag_manager\Event\EnhancedEcommerceEvents;
+use Drupal\commerce_google_tag_manager\Event\TrackCheckoutStepEvent;
 use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_order\Entity\OrderItemInterface;
 use Drupal\commerce_product\Entity\ProductVariationInterface;
@@ -14,8 +14,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * Track different events from Google's Enhanced Ecommerce.
  *
  * @see https://developers.google.com/tag-manager/enhanced-ecommerce
- *
- * @package Drupal\commerce_gtm_enhanced_ecommerce
  */
 class EventTrackerService {
 
@@ -34,12 +32,12 @@ class EventTrackerService {
   private $eventDispatcher;
 
   /**
-   * @var \Drupal\commerce_gtm_enhanced_ecommerce\EventStorageService
+   * @var \Drupal\commerce_google_tag_manager\EventStorageService
    */
   private $eventStorageService;
 
   /**
-   * @param \Drupal\commerce_gtm_enhanced_ecommerce\EventStorageService $eventStorageService
+   * @param \Drupal\commerce_google_tag_manager\EventStorageService $eventStorageService
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
    */
   public function __construct(EventStorageService $eventStorageService,
@@ -252,7 +250,7 @@ class EventTrackerService {
    * @param \Drupal\commerce_order\Entity\OrderItemInterface $orderItem
    *   A commerce order item.
    *
-   * @return \Drupal\commerce_gtm_enhanced_ecommerce\Product
+   * @return \Drupal\commerce_google_tag_manager\Product
    *   The Enhanced Ecommerce product.
    */
   private function buildProductFromOrderItem(OrderItemInterface $orderItem) {
@@ -276,7 +274,7 @@ class EventTrackerService {
    *
    * @param \Drupal\commerce_product\Entity\ProductVariationInterface $productVariation
    *   A commerce product variation.
-   * @return \Drupal\commerce_gtm_enhanced_ecommerce\Product
+   * @return \Drupal\commerce_google_tag_manager\Product
    *   The Enhanced Ecommerce product.
    */
   private function buildProductFromProductVariation(ProductVariationInterface $productVariation) {

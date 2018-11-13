@@ -1,17 +1,15 @@
 <?php
 
-namespace Drupal\commerce_gtm_enhanced_ecommerce;
+namespace Drupal\commerce_google_tag_manager;
 
-use Drupal\commerce_gtm_enhanced_ecommerce\Event\AlterEventDataEvent;
-use Drupal\commerce_gtm_enhanced_ecommerce\Event\EnhancedEcommerceEvents;
+use Drupal\commerce_google_tag_manager\Event\AlterEventDataEvent;
+use Drupal\commerce_google_tag_manager\Event\EnhancedEcommerceEvents;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Core\TempStore\TempStoreException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Stores all tracked Enhanced Ecommerce events in a private tempstore.
- *
- * @package Drupal\commerce_gtm_enhanced_ecommerce
  */
 class EventStorageService {
 
@@ -30,7 +28,7 @@ class EventStorageService {
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
    */
   public function __construct(PrivateTempStoreFactory $privateTempStoreFactory, EventDispatcherInterface $eventDispatcher) {
-    $this->tempStore = $privateTempStoreFactory->get('commerce_gtm_enhanced_ecommerce');
+    $this->tempStore = $privateTempStoreFactory->get('commerce_google_tag_manager');
     $this->eventDispatcher = $eventDispatcher;
   }
 

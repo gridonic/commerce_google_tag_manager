@@ -1,0 +1,10 @@
+commerce_google_tag_manager.events:
+  path: 'commerce_google_tag_manager'
+  defaults:
+    _controller: '\Drupal\commerce_google_tag_manager\Controller\EventsController::getEvents'
+    _disable_route_normalizer: 'TRUE'
+  methods: [GET]
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: 'TRUE'

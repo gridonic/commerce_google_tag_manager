@@ -1,11 +1,9 @@
 <?php
 
-namespace Drupal\commerce_gtm_enhanced_ecommerce;
+namespace Drupal\commerce_google_tag_manager;
 
 /**
  * Represents a product in the domain of Google's Enhanced Ecommerce.
- *
- * @package Drupal\commerce_gtm_enhanced_ecommerce
  */
 class Product {
 

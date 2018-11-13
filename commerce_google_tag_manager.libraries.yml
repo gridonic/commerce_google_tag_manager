@@ -1,7 +1,7 @@
-commerce_gtm_enhanced_ecommerce:
+commerce_google_tag_manager:
   version: VERSION
   js:
-    js/commerce_gtm_enhanced_ecommerce.js: {}
+    js/commerce_google_tag_manager.js: {}
   dependencies:
     - core/jquery
     - core/drupal

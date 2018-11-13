@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_gtm_enhanced_ecommerce\Event;
+namespace Drupal\commerce_google_tag_manager\Event;
 
 use Drupal\commerce_order\Entity\OrderInterface;
 use Symfony\Component\EventDispatcher\Event;
@@ -9,8 +9,6 @@ use Symfony\Component\EventDispatcher\Event;
  * Event dispatched when a checkout step is tracked.
  *
  * Event listeners may use this event to track checkout options.
- *
- * @package Drupal\commerce_gtm_enhanced_ecommerce\Event
  */
 class TrackCheckoutStepEvent extends Event {
 

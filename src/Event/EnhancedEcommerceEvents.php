@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_gtm_enhanced_ecommerce\Event;
+namespace Drupal\commerce_google_tag_manager\Event;
 
 /**
  * Defines events for the Commerce Google Tag Manager Enhanced Ecommerce module.
@@ -15,9 +15,9 @@ final class EnhancedEcommerceEvents {
    *
    * @Event
    *
-   * @see \Drupal\commerce_postfinance\Event\AlterProductEvent
+   * @see \Drupal\commerce_google_tag_manager\Event\AlterProductEvent
    */
-  const ALTER_PRODUCT = 'commerce_gtm_enhanced_ecommerce.alter_product';
+  const ALTER_PRODUCT = 'commerce_google_tag_manager.alter_product';
 
   /**
    * Allows to alter the event data of each Enhanced Ecommerce event
@@ -25,9 +25,9 @@ final class EnhancedEcommerceEvents {
    *
    * @Event
    *
-   * @see \Drupal\commerce_gtm_enhanced_ecommerce\Event\AlterEventDataEvent
+   * @see \Drupal\commerce_google_tag_manager\Event\AlterEventDataEvent
    */
-  const ALTER_EVENT_DATA = 'commerce_gtm_enhanced_ecommerce.alter_event_data';
+  const ALTER_EVENT_DATA = 'commerce_google_tag_manager.alter_event_data';
 
   /**
    * Event fired when tracking a checkout step. This allows event listeners
@@ -35,8 +35,8 @@ final class EnhancedEcommerceEvents {
    *
    * @Event
    *
-   * @see \Drupal\commerce_gtm_enhanced_ecommerce\Event\TrackCheckoutStepEvent
+   * @see \Drupal\commerce_google_tag_manager\Event\TrackCheckoutStepEvent
    */
-  const TRACK_CHECKOUT_STEP = 'commerce_gtm_enhanced_ecommerce.track_checkout_step';
+  const TRACK_CHECKOUT_STEP = 'commerce_google_tag_manager.track_checkout_step';
 
 }

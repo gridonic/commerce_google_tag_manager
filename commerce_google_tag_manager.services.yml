@@ -1,0 +1,17 @@
+services:
+  commerce_google_tag_manager.event_tracker:
+    class: Drupal\commerce_google_tag_manager\EventTrackerService
+    arguments: ['@commerce_google_tag_manager.event_storage', '@event_dispatcher']
+  commerce_google_tag_manager.event_storage:
+    class: Drupal\commerce_google_tag_manager\EventStorageService
+    arguments: ['@tempstore.private', '@event_dispatcher']
+  commerce_google_tag_manager.commerce_events_subscriber:
+    class: Drupal\commerce_google_tag_manager\EventSubscriber\CommerceEventsSubscriber
+    arguments: ['@commerce_google_tag_manager.event_tracker']
+    tags:
+    - { name: 'event_subscriber' }
+  commerce_google_tag_manager.kernel_events_subscriber:
+    class: Drupal\commerce_google_tag_manager\EventSubscriber\KernelEventsSubscriber
+    arguments: ['@commerce_google_tag_manager.event_tracker', '@current_route_match', '@commerce_checkout.checkout_order_manager']
+    tags:
+    - { name: 'event_subscriber' }

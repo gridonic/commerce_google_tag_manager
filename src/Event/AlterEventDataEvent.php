@@ -1,14 +1,12 @@
 <?php
 
-namespace Drupal\commerce_gtm_enhanced_ecommerce\Event;
+namespace Drupal\commerce_google_tag_manager\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Event to alter Enhanced Ecommerce event data before being
  * sent to the Google Tag Manager.
- *
- * @package Drupal\commerce_gtm_enhanced_ecommerce\Event
  */
 class AlterEventDataEvent extends Event {
 

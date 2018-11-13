@@ -1,21 +1,19 @@
 <?php
 
-namespace Drupal\commerce_gtm_enhanced_ecommerce\Event;
+namespace Drupal\commerce_google_tag_manager\Event;
 
-use Drupal\commerce_gtm_enhanced_ecommerce\Product;
+use Drupal\commerce_google_tag_manager\Product;
 use Drupal\commerce_product\Entity\ProductVariationInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Event to alter the Enhanced Ecommerce product mapped from a
  * commerce product variation.
- *
- * @package Drupal\commerce_gtm_enhanced_ecommerce\Event
  */
 class AlterProductEvent extends Event {
 
   /**
-   * @var \Drupal\commerce_gtm_enhanced_ecommerce\Product
+   * @var \Drupal\commerce_google_tag_manager\Product
    */
   private $product;
 
@@ -25,7 +23,7 @@ class AlterProductEvent extends Event {
   private $productVariation;
 
   /**
-   * @param \Drupal\commerce_gtm_enhanced_ecommerce\Product $product
+   * @param \Drupal\commerce_google_tag_manager\Product $product
    * @param \Drupal\commerce_product\Entity\ProductVariationInterface $productVariation
    */
   public function __construct(Product $product,
@@ -36,7 +34,7 @@ class AlterProductEvent extends Event {
   }
 
   /**
-   * @return \Drupal\commerce_gtm_enhanced_ecommerce\Product
+   * @return \Drupal\commerce_google_tag_manager\Product
    */
   public function getProduct() {
     return $this->product;

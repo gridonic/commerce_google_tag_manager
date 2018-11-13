@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Module file for the commerce_gtm_enhanced_ecommerce module.
+ * Module file for the commerce_google_tag_manager module.
  */
 
 use Drupal\Core\Cache\CacheableMetadata;
@@ -12,10 +12,10 @@ use Drupal\Core\Cache\CacheableMetadata;
  *
  * Implements hook_page_attachments().
  */
-function commerce_gtm_enhanced_ecommerce_page_attachments(array &$page) {
-  $page['#attached']['library'][] = 'commerce_gtm_enhanced_ecommerce/commerce_gtm_enhanced_ecommerce';
-  $page['#attached']['drupalSettings']['commerceGtmEnhancedEcommerce'] = [
-    'eventsUrl' => Drupal::service('url_generator')->generateFromRoute('commerce_gtm_enhanced_ecommerce.events'),
+function commerce_google_tag_manager_page_attachments(array &$page) {
+  $page['#attached']['library'][] = 'commerce_google_tag_manager/commerce_google_tag_manager';
+  $page['#attached']['drupalSettings']['commerceGoogleTagManager'] = [
+    'eventsUrl' => Drupal::service('url_generator')->generateFromRoute('commerce_google_tag_manager.events'),
     'dataLayerVariable' => Drupal::config('google_tag.settings')->get('data_layer') ?: 'dataLayer',
   ];
 
@@ -30,12 +30,12 @@ function commerce_gtm_enhanced_ecommerce_page_attachments(array &$page) {
  *
  * Implements hook_entity_view().
  */
-function commerce_gtm_enhanced_ecommerce_commerce_product_view(&$build) {
+function commerce_google_tag_manager_commerce_product_view(&$build) {
   if (Drupal::request()->getMethod() === 'GET' && $build['#view_mode'] === 'full') {
     /** @var \Drupal\commerce_product\Entity\ProductInterface $product */
     $product = $build['#commerce_product'];
-    /** @var \Drupal\commerce_gtm_enhanced_ecommerce\EventTrackerService $event_tracker */
-    $event_tracker = Drupal::service('commerce_gtm_enhanced_ecommerce.event_tracker');
+    /** @var \Drupal\commerce_google_tag_manager\EventTrackerService $event_tracker */
+    $event_tracker = Drupal::service('commerce_google_tag_manager.event_tracker');
     $event_tracker->productDetailViews([$product->getDefaultVariation()]);
   }
 }

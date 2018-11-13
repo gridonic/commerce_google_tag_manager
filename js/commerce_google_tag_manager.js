@@ -1,6 +1,6 @@
 /**
  * @file
- * Defines Javascript behaviors for commerce GTM enhanced ecommerce module.
+ * Defines Javascript behaviors for the commerce_google_tag_manager module.
  */
 
 (function ($, window, drupalSettings) {
@@ -11,7 +11,7 @@
             return;
         }
 
-        var settings = window.drupalSettings.commerceGtmEnhancedEcommerce || {};
+        var settings = drupalSettings.commerceGoogleTagManager || {};
         var url = settings.eventsUrl;
         var dataLayerVariable = settings.dataLayerVariable;
 

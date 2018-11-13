@@ -1,8 +1,8 @@
 {
-  "name": "gridonic/commerce_gtm_enhanced_ecommerce",
+  "name": "drupal/commerce_google_tag_manager",
   "type": "drupal-module",
   "description": "Provides Commerce integration for Enhanced Ecommerce events via Google Tag Manager",
-  "homepage": "https://github.com/gridonic/commerce_gtm_enhanced_ecommerce",
+  "homepage": "https://www.drupal.org/project/commerce_google_tag_manager",
   "license": "GPL-2.0+",
   "keywords": ["drupal", "commerce", "google tag manager", "enhanced ecommerce"],
   "require": {
