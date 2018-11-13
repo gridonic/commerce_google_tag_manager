@@ -336,7 +336,11 @@ class EventTrackerService {
       return '0';
     }
 
-    return number_format((float) $price, 2, '.', '');
+    // Truncate decimals without rounding.
+    $number = bcdiv((float) $price, 1, 2);
+
+    // Format the number as requested by Google's Enhanced Ecommerce.
+    return number_format($number, 2, '.', '');
   }
 
   /**
