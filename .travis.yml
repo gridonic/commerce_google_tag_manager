@@ -102,6 +102,7 @@ mysql:
 before_install:
   - composer self-update
   - cd ./tests
+  # Use the wengerk fork of drupal_ti to allow multiple composer dependencies.
   - composer global config repositories.repo-name git https://github.com/wengerk/drupal_ti
   - composer global require "lionsad/drupal_ti:dev-patch-1"
   - drupal-ti before_install
