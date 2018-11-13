@@ -1,27 +1,27 @@
 <?php
 
-namespace Drupal\Tests\commerce_gtm_enhanced_ecommerce\Unit;
+namespace Drupal\Tests\commerce_google_tag_manager\Unit;
 
 use Drupal\Tests\UnitTestCase;
-use Drupal\commerce_gtm_enhanced_ecommerce\EventTrackerService;
-use Drupal\commerce_gtm_enhanced_ecommerce\EventStorageService;
+use Drupal\commerce_google_tag_manager\EventTrackerService;
+use Drupal\commerce_google_tag_manager\EventStorageService;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Drupal\Tests\commerce_gtm_enhanced_ecommerce\Traits\InvokeMethodTrait;
+use Drupal\Tests\commerce_google_tag_manager\Traits\InvokeMethodTrait;
 
 /**
  * Tests the formatPrice of EventTrackerService class.
  *
- * @coversDefaultClass \Drupal\commerce_gtm_enhanced_ecommerce\EventTrackerService
+ * @coversDefaultClass \Drupal\commerce_google_tag_manager\EventTrackerService
  *
  * @group commerce
- * @group commerce_gtm_enhanced_ecommerce
- * @group commerce_gtm_enhanced_ecommerce_unit
+ * @group commerce_google_tag_manager
+ * @group commerce_google_tag_manager_unit
  */
 class formatPriceTest extends UnitTestCase {
   use InvokeMethodTrait;
 
   /**
-   * @var \Drupal\commerce_gtm_enhanced_ecommerce\EventTrackerService
+   * @var \Drupal\commerce_google_tag_manager\EventTrackerService
    */
   private $ecommerceEventTrackerService;
 

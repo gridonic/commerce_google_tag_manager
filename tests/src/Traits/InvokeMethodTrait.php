@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\commerce_gtm_enhanced_ecommerce\Traits;
+namespace Drupal\Tests\commerce_google_tag_manager\Traits;
 
 /**
  * Provides a function to invoke protected/private methods of a class.
