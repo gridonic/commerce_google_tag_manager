@@ -8,41 +8,43 @@ namespace Drupal\commerce_google_tag_manager;
 class Product {
 
   /**
+   * The product name.
+   *
    * @var string
    */
   private $name;
 
   /**
+   * Unique identifier.
+   *
    * @var string
    */
   private $id;
 
   /**
+   * The price.
+   *
    * @var string
    */
   private $price;
 
   /**
-   * @var string
-   */
-  private $brand;
-
-  /**
-   * @var string
-   */
-  private $category;
-
-  /**
+   * The product variation title.
+   *
    * @var string
    */
   private $variant;
 
   /**
+   * Collection of dimensions for GA.
+   *
    * @var array
    */
   private $dimensions = [];
 
   /**
+   * Collection of dimensions for GA.
+   *
    * @var array
    */
   private $metrics = [];
@@ -51,6 +53,7 @@ class Product {
    * Build the product data as array in the requested format by Google.
    *
    * @return array
+   *   Formated Product data as requested by Google.
    */
   public function toArray() {
     $data = [];
@@ -60,7 +63,8 @@ class Product {
         foreach ($value as $i => $v) {
           $data[rtrim($property, 's') . ($i + 1)] = $v;
         }
-      } else if ($value !== NULL) {
+      }
+      elseif ($value !== NULL) {
         $data[$property] = $value;
       }
     }
@@ -69,16 +73,23 @@ class Product {
   }
 
   /**
+   * Get the product name.
+   *
    * @return string
+   *   The name.
    */
   public function getName() {
     return $this->name;
   }
 
   /**
-   * @param string $name
+   * Set the product name.
    *
-   * @return Product
+   * @param string $name
+   *   The name.
+   *
+   * @return Drupal\commerce_google_tag_manager\Product
+   *   The Product object.
    */
   public function setName($name) {
     $this->name = $name;
@@ -86,16 +97,23 @@ class Product {
   }
 
   /**
+   * Get the unique identifier.
+   *
    * @return string
+   *   The unique identifier.
    */
   public function getId() {
     return $this->id;
   }
 
   /**
-   * @param string $id
+   * Set the unique identifier.
    *
-   * @return Product
+   * @param string $id
+   *   The identifier.
+   *
+   * @return Drupal\commerce_google_tag_manager\Product
+   *   The Product object.
    */
   public function setId($id) {
     $this->id = $id;
@@ -103,16 +121,23 @@ class Product {
   }
 
   /**
+   * Get the price.
+   *
    * @return string
+   *   The price.
    */
   public function getPrice() {
     return $this->price;
   }
 
   /**
-   * @param string $price
+   * Set the price.
    *
-   * @return Product
+   * @param string $price
+   *   The price.
+   *
+   * @return Drupal\commerce_google_tag_manager\Product
+   *   The Product object.
    */
   public function setPrice($price) {
     $this->price = $price;
@@ -120,50 +145,23 @@ class Product {
   }
 
   /**
-   * @return string
-   */
-  public function getBrand() {
-    return $this->brand;
-  }
-
-  /**
-   * @param string $brand
+   * Get the variation title.
    *
-   * @return Product
-   */
-  public function setBrand($brand) {
-    $this->brand = $brand;
-    return $this;
-  }
-
-  /**
    * @return string
-   */
-  public function getCategory() {
-    return $this->category;
-  }
-
-  /**
-   * @param string $category
-   *
-   * @return Product
-   */
-  public function setCategory($category) {
-    $this->category = $category;
-    return $this;
-  }
-
-  /**
-   * @return string
+   *   The variation title.
    */
   public function getVariant() {
     return $this->variant;
   }
 
   /**
-   * @param string $variant
+   * Set the variation title.
    *
-   * @return Product
+   * @param string $variant
+   *   The variation title.
+   *
+   * @return Drupal\commerce_google_tag_manager\Product
+   *   The Product object.
    */
   public function setVariant($variant) {
     $this->variant = $variant;
@@ -171,16 +169,23 @@ class Product {
   }
 
   /**
-   * @return array
+   * Get the collection of dimensions.
+   *
+   * @return string[]
+   *   Collection of dimensions.
    */
   public function getDimensions() {
     return $this->dimensions;
   }
 
   /**
-   * @param array $dimensions
+   * Set dimensions.
    *
-   * @return Product
+   * @param array $dimensions
+   *   Collection of dimensions.
+   *
+   * @return Drupal\commerce_google_tag_manager\Product
+   *   The Product object.
    */
   public function setDimensions(array $dimensions) {
     $this->dimensions = $dimensions;
@@ -188,16 +193,23 @@ class Product {
   }
 
   /**
-   * @return array
+   * Get the collection of metrics.
+   *
+   * @return string[]
+   *   Collection of metrics.
    */
   public function getMetrics() {
     return $this->metrics;
   }
 
   /**
-   * @param array $metrics
+   * Set metrics.
    *
-   * @return Product
+   * @param array $metrics
+   *   Collection of metrics.
+   *
+   * @return Drupal\commerce_google_tag_manager\Product
+   *   The Product object.
    */
   public function setMetrics(array $metrics) {
     $this->metrics = $metrics;
@@ -205,11 +217,13 @@ class Product {
   }
 
   /**
-   * Add a custom dimension;
+   * Add a custom dimension.
    *
    * @param string $dimension
+   *   The dimension to add.
    *
-   * @return Product
+   * @return Drupal\commerce_google_tag_manager\Product
+   *   The Product object.
    */
   public function addDimension($dimension) {
     $this->dimensions[] = $dimension;
@@ -220,8 +234,10 @@ class Product {
    * Add a custom metric.
    *
    * @param string $metric
+   *   The metric to add.
    *
-   * @return Product
+   * @return Drupal\commerce_google_tag_manager\Product
+   *   The Product object.
    */
   public function addMetric($metric) {
     $this->metrics[] = $metric;

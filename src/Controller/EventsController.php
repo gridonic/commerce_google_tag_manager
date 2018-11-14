@@ -16,19 +16,24 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class EventsController extends ControllerBase {
 
   /**
+   * The Commerce GTM event storage.
+   *
    * @var \Drupal\commerce_google_tag_manager\EventStorageService
    */
-  private $eventStorageService;
+  private $eventStorage;
 
   /**
-   * @param \Drupal\commerce_google_tag_manager\EventStorageService $eventStorageService
+   * Constructs the EventsController object.
+   *
+   * @param \Drupal\commerce_google_tag_manager\EventStorageService $event_storage
+   *   The Commerce GTM event storage.
    */
-  public function __construct(EventStorageService $eventStorageService) {
-    $this->eventStorageService = $eventStorageService;
+  public function __construct(EventStorageService $event_storage) {
+    $this->eventStorage = $event_storage;
   }
 
   /**
-   * @inheritdoc
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static($container->get('commerce_google_tag_manager.event_storage'));
@@ -38,10 +43,11 @@ class EventsController extends ControllerBase {
    * Get all tracked events as JSON.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   The event format as JSON.
    */
   public function getEvents() {
-    $events = $this->eventStorageService->getEvents();
-    $this->eventStorageService->flush();
+    $events = $this->eventStorage->getEvents();
+    $this->eventStorage->flush();
 
     return new JsonResponse($events);
   }

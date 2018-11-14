@@ -15,19 +15,24 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class CommerceEventsSubscriber implements EventSubscriberInterface {
 
   /**
+   * The Commerce GTM event tracker.
+   *
    * @var \Drupal\commerce_google_tag_manager\EventTrackerService
    */
-  private $eventTrackerService;
+  private $eventTracker;
 
   /**
-   * @param \Drupal\commerce_google_tag_manager\EventTrackerService $eventTrackerService
+   * Constructs the CommerceEventsSubscriber object.
+   *
+   * @param \Drupal\commerce_google_tag_manager\EventTrackerService $event_tracker
+   *   The Commerce GTM event tracker.
    */
-  public function __construct(EventTrackerService $eventTrackerService) {
-    $this->eventTrackerService = $eventTrackerService;
+  public function __construct(EventTrackerService $event_tracker) {
+    $this->eventTracker = $event_tracker;
   }
 
   /**
-   * @inheritdoc
+   * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
     return [
@@ -38,26 +43,35 @@ class CommerceEventsSubscriber implements EventSubscriberInterface {
   }
 
   /**
+   * Add an "addToCart" event to track.
+   *
    * @param \Drupal\commerce_cart\Event\CartEntityAddEvent $event
+   *   The add to cart event.
    */
   public function trackCartAdd(CartEntityAddEvent $event) {
-    $this->eventTrackerService->addToCart($event->getOrderItem(), (int) $event->getQuantity());
+    $this->eventTracker->addToCart($event->getOrderItem(), (int) $event->getQuantity());
   }
 
   /**
+   * Add an "cartRemove" event to track.
+   *
    * @param \Drupal\commerce_cart\Event\CartOrderItemRemoveEvent $event
+   *   The cart event.
    */
   public function trackCartRemove(CartOrderItemRemoveEvent $event) {
-    $this->eventTrackerService->removeFromCart($event->getOrderItem(), 1);
+    $this->eventTracker->removeFromCart($event->getOrderItem(), 1);
   }
 
   /**
+   * Add an "purchase" event to track.
+   *
    * @param \Drupal\state_machine\Event\WorkflowTransitionEvent $event
+   *   The workflow transition event.
    */
   public function trackPurchase(WorkflowTransitionEvent $event) {
     /** @var \Drupal\commerce_order\Entity\OrderInterface $order */
     $order = $event->getEntity();
-    $this->eventTrackerService->purchase($order);
+    $this->eventTracker->purchase($order);
   }
 
 }
