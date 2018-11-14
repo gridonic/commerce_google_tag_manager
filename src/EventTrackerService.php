@@ -272,21 +272,24 @@ class EventTrackerService {
   /**
    * Build the Enhanced Ecommerce product from a given commerce product variation.
    *
-   * @param \Drupal\commerce_product\Entity\ProductVariationInterface $productVariation
+   * @param \Drupal\commerce_product\Entity\ProductVariationInterface|null $productVariation
    *   A commerce product variation.
    * @return \Drupal\commerce_google_tag_manager\Product
    *   The Enhanced Ecommerce product.
    */
-  private function buildProductFromProductVariation(ProductVariationInterface $productVariation) {
+  private function buildProductFromProductVariation($productVariation) {
     $product = new Product();
-    $product
-      ->setName($productVariation->getProduct()->getTitle())
-      ->setId($productVariation->getProduct()->id())
-      ->setVariant($productVariation->getTitle())
-      ->setPrice($this->formatPrice((float) $productVariation->getPrice()->getNumber()));
 
-    $event = new AlterProductEvent($product, $productVariation);
-    $this->eventDispatcher->dispatch(EnhancedEcommerceEvents::ALTER_PRODUCT, $event);
+    if ($productVariation) {
+      $product
+        ->setName($productVariation->getProduct()->getTitle())
+        ->setId($productVariation->getProduct()->id())
+        ->setVariant($productVariation->getTitle())
+        ->setPrice($this->formatPrice((float) $productVariation->getPrice()->getNumber()));
+
+      $event = new AlterProductEvent($product, $productVariation);
+      $this->eventDispatcher->dispatch(EnhancedEcommerceEvents::ALTER_PRODUCT, $event);
+    }
 
     return $product;
   }
