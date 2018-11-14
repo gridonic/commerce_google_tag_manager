@@ -40,7 +40,7 @@ class FormatPriceTest extends UnitTestCase {
   }
 
   /**
-   * @covers ::formatPrice()
+   * @covers ::formatPrice
    *
    * @dataProvider pricesProvider
    */
