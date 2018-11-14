@@ -1,19 +1,56 @@
 {
   "name": "drupal/commerce_google_tag_manager",
-  "type": "drupal-module",
   "description": "Provides Commerce integration for Enhanced Ecommerce events via Google Tag Manager",
+  "type": "drupal-module",
   "homepage": "https://www.drupal.org/project/commerce_google_tag_manager",
-  "license": "GPL-2.0-or-later",
   "keywords": ["drupal", "commerce", "google tag manager", "enhanced ecommerce"],
+  "authors": [
+    {
+      "name": "gridonic",
+      "email": "hello@gridonic.ch",
+      "homepage": "https://gridonic.ch",
+      "role": "Sponsor"
+    },
+    {
+      "name": "Antistatique",
+      "email": "info@antistatique.net",
+      "homepage": "https://antistatique.net",
+      "role": "Sponsor"
+    },
+    {
+      "name": "Stefan Wanzenried",
+      "email": "stefan.wanzenried@gridonic.ch",
+      "homepage": "https://www.drupal.org/u/schtifu",
+      "role": "Author & Maintainer"
+    },
+    {
+      "name": "Kevin Wenger",
+      "email": "contact@kevin-wenger.ch",
+      "homepage": "https://www.drupal.org/u/wengerk",
+      "role": "Maintainer"
+    }
+  ],
   "support": {
     "issues": "https://www.drupal.org/project/issues/commerce_google_tag_manager"
   },
+  "license": "GPL-2.0-or-later",
+  "repositories": [
+    {
+        "type": "composer",
+        "url": "https://packages.drupal.org/8"
+    }
+  ],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "require": {
     "drupal/commerce": "^2.8",
     "drupal/google_tag": "^1.1"
   },
   "require-dev": {
-    "squizlabs/php_codesniffer": "^2.7",
-    "drupal/coder": "*"
+    "squizlabs/php_codesniffer": "^3.0",
+    "drupal/coder": "*",
+    "phpmd/phpmd": "^2.6",
+    "sebastian/phpcpd": "^3.0",
+    "wapmorgan/php-code-fixer": "^2.0"
   }
 }
