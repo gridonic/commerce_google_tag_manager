@@ -29,6 +29,20 @@ class Product {
   private $price;
 
   /**
+   * The brand.
+   *
+   * @var string
+   */
+  private $brand;
+
+  /**
+   * The category.
+   *
+   * @var string
+   */
+  private $category;
+
+  /**
    * The product variation title.
    *
    * @var string
@@ -141,6 +155,54 @@ class Product {
    */
   public function setPrice($price) {
     $this->price = $price;
+    return $this;
+  }
+
+  /**
+   * Get the brand.
+   *
+   * @return string
+   *   The brand.
+   */
+  public function getBrand() {
+    return $this->brand;
+  }
+
+  /**
+   * Set the brand.
+   *
+   * @param string $brand
+   *   The brand.
+   *
+   * @return Drupal\commerce_google_tag_manager\Product
+   *   The Product object.
+   */
+  public function setBrand($brand) {
+    $this->brand = $brand;
+    return $this;
+  }
+
+  /**
+   * Get the category.
+   *
+   * @return string
+   *   The category.
+   */
+  public function getCategory() {
+    return $this->category;
+  }
+
+  /**
+   * Set teh category.
+   *
+   * @param string $category
+   *   The category.
+   *
+   * @return Drupal\commerce_google_tag_manager\Product
+   *   The Product object.
+   */
+  public function setCategory($category) {
+    $this->category = $category;
     return $this;
   }
 
