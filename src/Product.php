@@ -43,7 +43,7 @@ class Product {
   private $category;
 
   /**
-   * The product variation title.
+   * The product variation.
    *
    * @var string
    */
@@ -207,20 +207,20 @@ class Product {
   }
 
   /**
-   * Get the variation title.
+   * Get the variation.
    *
    * @return string
-   *   The variation title.
+   *   The variation.
    */
   public function getVariant() {
     return $this->variant;
   }
 
   /**
-   * Set the variation title.
+   * Set the variation.
    *
    * @param string $variant
-   *   The variation title.
+   *   The variation.
    *
    * @return \Drupal\commerce_google_tag_manager\Product
    *   The Product object.
