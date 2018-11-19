@@ -57,7 +57,7 @@ class Product {
   private $dimensions = [];
 
   /**
-   * Collection of dimensions for GA.
+   * Collection of metrics for GA.
    *
    * @var array
    */
@@ -193,7 +193,7 @@ class Product {
   }
 
   /**
-   * Set teh category.
+   * Set the category.
    *
    * @param string $category
    *   The category.
