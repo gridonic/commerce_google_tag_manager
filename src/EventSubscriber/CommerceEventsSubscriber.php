@@ -43,7 +43,7 @@ class CommerceEventsSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Add an "addToCart" event to track.
+   * Track the "addToCart" event.
    *
    * @param \Drupal\commerce_cart\Event\CartEntityAddEvent $event
    *   The add to cart event.
@@ -53,7 +53,7 @@ class CommerceEventsSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Add an "cartRemove" event to track.
+   * Track the "cartRemove" event.
    *
    * @param \Drupal\commerce_cart\Event\CartOrderItemRemoveEvent $event
    *   The cart event.
@@ -63,7 +63,7 @@ class CommerceEventsSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Add an "purchase" event to track.
+   * Track the "purchase" event.
    *
    * @param \Drupal\state_machine\Event\WorkflowTransitionEvent $event
    *   The workflow transition event.
