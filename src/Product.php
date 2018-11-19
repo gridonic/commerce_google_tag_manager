@@ -102,7 +102,7 @@ class Product {
    * @param string $name
    *   The name.
    *
-   * @return Drupal\commerce_google_tag_manager\Product
+   * @return \Drupal\commerce_google_tag_manager\Product
    *   The Product object.
    */
   public function setName($name) {
@@ -126,7 +126,7 @@ class Product {
    * @param string $id
    *   The identifier.
    *
-   * @return Drupal\commerce_google_tag_manager\Product
+   * @return \Drupal\commerce_google_tag_manager\Product
    *   The Product object.
    */
   public function setId($id) {
@@ -150,7 +150,7 @@ class Product {
    * @param string $price
    *   The price.
    *
-   * @return Drupal\commerce_google_tag_manager\Product
+   * @return \Drupal\commerce_google_tag_manager\Product
    *   The Product object.
    */
   public function setPrice($price) {
@@ -174,7 +174,7 @@ class Product {
    * @param string $brand
    *   The brand.
    *
-   * @return Drupal\commerce_google_tag_manager\Product
+   * @return \Drupal\commerce_google_tag_manager\Product
    *   The Product object.
    */
   public function setBrand($brand) {
@@ -198,7 +198,7 @@ class Product {
    * @param string $category
    *   The category.
    *
-   * @return Drupal\commerce_google_tag_manager\Product
+   * @return \Drupal\commerce_google_tag_manager\Product
    *   The Product object.
    */
   public function setCategory($category) {
@@ -222,7 +222,7 @@ class Product {
    * @param string $variant
    *   The variation title.
    *
-   * @return Drupal\commerce_google_tag_manager\Product
+   * @return \Drupal\commerce_google_tag_manager\Product
    *   The Product object.
    */
   public function setVariant($variant) {
@@ -246,7 +246,7 @@ class Product {
    * @param array $dimensions
    *   Collection of dimensions.
    *
-   * @return Drupal\commerce_google_tag_manager\Product
+   * @return \Drupal\commerce_google_tag_manager\Product
    *   The Product object.
    */
   public function setDimensions(array $dimensions) {
@@ -270,7 +270,7 @@ class Product {
    * @param array $metrics
    *   Collection of metrics.
    *
-   * @return Drupal\commerce_google_tag_manager\Product
+   * @return \Drupal\commerce_google_tag_manager\Product
    *   The Product object.
    */
   public function setMetrics(array $metrics) {
@@ -284,7 +284,7 @@ class Product {
    * @param string $dimension
    *   The dimension to add.
    *
-   * @return Drupal\commerce_google_tag_manager\Product
+   * @return \Drupal\commerce_google_tag_manager\Product
    *   The Product object.
    */
   public function addDimension($dimension) {
@@ -298,7 +298,7 @@ class Product {
    * @param string $metric
    *   The metric to add.
    *
-   * @return Drupal\commerce_google_tag_manager\Product
+   * @return \Drupal\commerce_google_tag_manager\Product
    *   The Product object.
    */
   public function addMetric($metric) {
