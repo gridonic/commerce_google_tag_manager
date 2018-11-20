@@ -27,167 +27,175 @@ class EventTrackerService {
   const EVENT_PURCHASE = 'purchase';
 
   /**
+   * The event dispatcher.
+   *
    * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
    */
   private $eventDispatcher;
 
   /**
+   * The Commerce GTM event storage.
+   *
    * @var \Drupal\commerce_google_tag_manager\EventStorageService
    */
-  private $eventStorageService;
+  private $eventStorage;
 
   /**
-   * @param \Drupal\commerce_google_tag_manager\EventStorageService $eventStorageService
-   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+   * Constructs the EventTrackerService service.
+   *
+   * @param \Drupal\commerce_google_tag_manager\EventStorageService $event_storage
+   *   The Commerce GTM event storage.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
+   *   The event dispatcher.
    */
-  public function __construct(EventStorageService $eventStorageService,
-                              EventDispatcherInterface $eventDispatcher
+  public function __construct(EventStorageService $event_storage,
+                              EventDispatcherInterface $event_dispatcher
                               ) {
-    $this->eventDispatcher = $eventDispatcher;
-    $this->eventStorageService = $eventStorageService;
+    $this->eventDispatcher = $event_dispatcher;
+    $this->eventStorage = $event_storage;
   }
 
   /**
    * Track product impressions.
    *
-   * @param \Drupal\commerce_product\Entity\ProductVariationInterface[] $productVariations
+   * @param \Drupal\commerce_product\Entity\ProductVariationInterface[] $product_variations
    *   The commerce product variation entities being viewed.
    * @param string $list
    *   The name of the list showing the products.
    */
-  public function productImpressions(array $productVariations, $list = '') {
-    $productsData = array_map(function ($productVariation) use ($list) {
+  public function productImpressions(array $product_variations, $list = '') {
+    $products_data = array_map(function ($product_variation) use ($list) {
       return array_merge(
-        $this->buildProductFromProductVariation($productVariation)->toArray(),
+        $this->buildProductFromProductVariation($product_variation)->toArray(),
         ['list' => $list]);
-    }, $productVariations);
+    }, $product_variations);
 
     $data = [
       'event' => self::EVENT_PRODUCT_IMPRESSIONS,
       'ecommerce' => [
-        'impressions' => $productsData,
+        'impressions' => $products_data,
       ],
     ];
 
-    $this->eventStorageService->addEvent($data);
+    $this->eventStorage->addEvent($data);
   }
 
   /**
    * Track product detail views.
    *
-   * @param \Drupal\commerce_product\Entity\ProductVariation[] $productVariations
+   * @param \Drupal\commerce_product\Entity\ProductVariation[] $product_variations
    *   The commerce product variations being viewed.
    * @param string $list
    *   An optional name of a list.
    */
-  public function productDetailViews(array $productVariations, $list = '') {
+  public function productDetailViews(array $product_variations, $list = '') {
     $data = [
       'event' => self::EVENT_PRODUCT_DETAIL_VIEWS,
       'ecommerce' => [
         'detail' => [
           'actionField' => ['list' => $list],
-          'products' => $this->buildProductsFromProductVariations($productVariations),
+          'products' => $this->buildProductsFromProductVariations($product_variations),
         ],
       ],
     ];
 
-    $this->eventStorageService->addEvent($data);
+    $this->eventStorage->addEvent($data);
   }
 
   /**
    * Track a "product click" event.
    *
-   * @param array $productVariations
+   * @param array $product_variations
    *   A commerce product variation that was clicked.
    * @param string $list
    *   An optional name of a list.
    */
-  public function productClick(array $productVariations, $list = '') {
+  public function productClick(array $product_variations, $list = '') {
     $data = [
       'event' => self::EVENT_PRODUCT_CLICK,
       'ecommerce' => [
         'click' => [
           'actionField' => ['list' => $list],
-          'products' => $this->buildProductsFromProductVariations($productVariations),
+          'products' => $this->buildProductsFromProductVariations($product_variations),
         ],
       ],
     ];
 
-    $this->eventStorageService->addEvent($data);
+    $this->eventStorage->addEvent($data);
   }
 
   /**
    * Track the "addToCart" event.
    *
-   * @param \Drupal\commerce_order\Entity\OrderItemInterface $orderItem
+   * @param \Drupal\commerce_order\Entity\OrderItemInterface $order_item
    *   The oder item added to the cart.
    * @param int $quantity
    *   Quantity added to cart.
    */
-  public function addToCart(OrderItemInterface $orderItem, $quantity) {
-    $product = $this->buildProductFromOrderItem($orderItem);
+  public function addToCart(OrderItemInterface $order_item, $quantity) {
+    $product = $this->buildProductFromOrderItem($order_item);
 
     $data = [
       'event' => self::EVENT_ADD_CART,
       'ecommerce' => [
-        'currencyCode' => $orderItem->getTotalPrice()->getCurrencyCode(),
+        'currencyCode' => $order_item->getTotalPrice()->getCurrencyCode(),
         'add' => [
           'products' => [
-            array_merge($product->toArray(), ['quantity' => $quantity])
+            array_merge($product->toArray(), ['quantity' => $quantity]),
           ],
         ],
       ],
     ];
 
-    $this->eventStorageService->addEvent($data);
+    $this->eventStorage->addEvent($data);
   }
 
   /**
    * Track the "removeFromCart" event.
    *
-   * @param \Drupal\commerce_order\Entity\OrderItemInterface $orderItem
+   * @param \Drupal\commerce_order\Entity\OrderItemInterface $order_item
    *   The commerce order item removed from the cart.
    * @param int $quantity
    *   The removed quantity.
    */
-  public function removeFromCart(OrderItemInterface $orderItem, $quantity) {
+  public function removeFromCart(OrderItemInterface $order_item, $quantity) {
     $data = [
       'event' => self::EVENT_REMOVE_CART,
       'ecommerce' => [
         'remove' => [
-          'products' => $this->buildProductsFromOrderItems([$orderItem]),
+          'products' => $this->buildProductsFromOrderItems([$order_item]),
         ],
       ],
     ];
 
-    $this->eventStorageService->addEvent($data);
+    $this->eventStorage->addEvent($data);
   }
 
   /**
    * Track a checkout step.
    *
-   * @param int $stepIndex
+   * @param int $step_index
    *   The index of the checkout step (1-based).
-   * @param OrderInterface $order
+   * @param \Drupal\commerce_order\Entity\OrderInterface $order
    *   The commerce order representing the cart.
    */
-  public function checkoutStep($stepIndex, OrderInterface $order) {
+  public function checkoutStep($step_index, OrderInterface $order) {
     $data = [
       'event' => self::EVENT_CHECKOUT,
       'ecommerce' => [
         'checkout' => [
           'actionField' => [
-            'step' => $stepIndex,
+            'step' => $step_index,
           ],
           'products' => $this->buildProductsFromOrderItems($order->getItems()),
         ],
       ],
     ];
 
-    $this->eventStorageService->addEvent($data);
+    $this->eventStorage->addEvent($data);
 
     // Throw an event to add possible checkout step options by event listeners.
-    $event = new TrackCheckoutStepEvent($stepIndex, $order);
+    $event = new TrackCheckoutStepEvent($step_index, $order);
     $this->eventDispatcher->dispatch(EnhancedEcommerceEvents::TRACK_CHECKOUT_STEP, $event);
   }
 
@@ -196,25 +204,25 @@ class EventTrackerService {
    *
    * This allows to track additional metadata for any checkout step.
    *
-   * @param $stepIndex
+   * @param string $step_index
    *   The index of the checkout step (1-based).
-   * @param $checkoutOption
+   * @param string $checkout_option
    *   The option to track with the given step.
    */
-  public function checkoutOption($stepIndex, $checkoutOption) {
+  public function checkoutOption($step_index, $checkout_option) {
     $data = [
       'event' => self::EVENT_CHECKOUT_OPTION,
       'ecommerce' => [
         'checkout_option' => [
           'actionField' => [
-            'step' => $stepIndex,
-            'option' => $checkoutOption,
+            'step' => $step_index,
+            'option' => $checkout_option,
           ],
         ],
       ],
     ];
 
-    $this->eventStorageService->addEvent($data);
+    $this->eventStorage->addEvent($data);
   }
 
   /**
@@ -240,52 +248,54 @@ class EventTrackerService {
       ],
     ];
 
-    // TODO: Add tax
-    $this->eventStorageService->addEvent($data);
+    // TODO: Add tax.
+    $this->eventStorage->addEvent($data);
   }
 
   /**
    * Build the Enhanced Ecommerce product from a given commerce order item.
    *
-   * @param \Drupal\commerce_order\Entity\OrderItemInterface $orderItem
+   * @param \Drupal\commerce_order\Entity\OrderItemInterface $order_item
    *   A commerce order item.
    *
    * @return \Drupal\commerce_google_tag_manager\Product
    *   The Enhanced Ecommerce product.
    */
-  private function buildProductFromOrderItem(OrderItemInterface $orderItem) {
-    $purchasedEntity = $orderItem->getPurchasedEntity();
+  private function buildProductFromOrderItem(OrderItemInterface $order_item) {
+    $purchased_entity = $order_item->getPurchasedEntity();
 
-    if ($purchasedEntity instanceof ProductVariationInterface) {
-      $product = $this->buildProductFromProductVariation($purchasedEntity);
-    } else {
+    if ($purchased_entity instanceof ProductVariationInterface) {
+      $product = $this->buildProductFromProductVariation($purchased_entity);
+    }
+    else {
       // The purchased entity is not a product variation.
       $product = (new Product())
-        ->setName($orderItem->getTitle())
-        ->setId($purchasedEntity->id())
-        ->setPrice($this->formatPrice((float) $orderItem->getTotalPrice()->getNumber()));
+        ->setName($order_item->getTitle())
+        ->setId($purchased_entity->id())
+        ->setPrice($this->formatPrice((float) $order_item->getTotalPrice()->getNumber()));
     }
 
     return $product;
   }
 
   /**
-   * Build the Enhanced Ecommerce product from a given commerce product variation.
+   * Build Enhanced Ecommerce product from a given commerce product variation.
    *
-   * @param \Drupal\commerce_product\Entity\ProductVariationInterface $productVariation
+   * @param \Drupal\commerce_product\Entity\ProductVariationInterface $product_variation
    *   A commerce product variation.
+   *
    * @return \Drupal\commerce_google_tag_manager\Product
    *   The Enhanced Ecommerce product.
    */
-  private function buildProductFromProductVariation(ProductVariationInterface $productVariation) {
+  private function buildProductFromProductVariation(ProductVariationInterface $product_variation) {
     $product = new Product();
     $product
-      ->setName($productVariation->getProduct()->getTitle())
-      ->setId($productVariation->getProduct()->id())
-      ->setVariant($productVariation->getTitle())
-      ->setPrice($this->formatPrice((float) $productVariation->getPrice()->getNumber()));
+      ->setName($product_variation->getProduct()->getTitle())
+      ->setId($product_variation->getProduct()->id())
+      ->setVariant($product_variation->getTitle())
+      ->setPrice($this->formatPrice((float) $product_variation->getPrice()->getNumber()));
 
-    $event = new AlterProductEvent($product, $productVariation);
+    $event = new AlterProductEvent($product, $product_variation);
     $this->eventDispatcher->dispatch(EnhancedEcommerceEvents::ALTER_PRODUCT, $event);
 
     return $product;
@@ -294,40 +304,49 @@ class EventTrackerService {
   /**
    * Build the Enhanced Ecommerce products from given commerce order items.
    *
-   * @param array $orderItems
+   * @param array $order_items
    *   The commerce order items.
-   * @return array
-   *   An array of EnhancedEcommerce products.
-   */
-  private function buildProductsFromOrderItems(array $orderItems) {
-    return array_map(function($orderItem) {
-      return array_merge(
-        $this->buildProductFromOrderItem($orderItem)->toArray(),
-        ['quantity' => (int) $orderItem->getQuantity()]
-      );
-    }, $orderItems);
-  }
-
-  /**
-   * Build the Enhanced Ecommerce products from given commerce product variations.
    *
-   * @param array $productVariations
-   *   The commerce product variations.
    * @return array
    *   An array of EnhancedEcommerce products.
    */
-  private function buildProductsFromProductVariations(array $productVariations) {
-    return array_map(function($productVariation) {
-      return $this
-        ->buildProductFromProductVariation($productVariation)
-        ->toArray();
-    }, $productVariations);
+  private function buildProductsFromOrderItems(array $order_items) {
+    return array_map(function ($order_item) {
+      return array_merge(
+        $this->buildProductFromOrderItem($order_item)->toArray(),
+        ['quantity' => (int) $order_item->getQuantity()]
+      );
+    }, $order_items);
   }
 
   /**
+   * Build Enhanced Ecommerce products from given commerce product variations.
+   *
+   * @param array $product_variations
+   *   The commerce product variations.
+   *
+   * @return array
+   *   An array of EnhancedEcommerce products.
+   */
+  private function buildProductsFromProductVariations(array $product_variations) {
+    return array_map(function ($product_variation) {
+      return $this
+        ->buildProductFromProductVariation($product_variation)
+        ->toArray();
+    }, $product_variations);
+  }
+
+  /**
+   * Format the given price into a compliant Google's Enhanced Ecommerce.
+   *
+   * The given price will be truncate to contain only 2 decimals.
+   * No round up are operate, so 11,999 will become 11,99.
+   *
    * @param float $price
+   *   The price to format.
    *
    * @return string
+   *   The formatted price.
    */
   private function formatPrice($price) {
     if ($price == 0) {
@@ -345,8 +364,10 @@ class EventTrackerService {
    * Calculate the total shipping costs from the given order.
    *
    * @param \Drupal\commerce_order\Entity\OrderInterface $order
+   *   The order containing potential shipping.
    *
    * @return float
+   *   The shipping total price.
    */
   private function calculateShipping(OrderInterface $order) {
     if ($order->hasField('shipments') && !$order->get('shipments')->isEmpty()) {
@@ -366,24 +387,26 @@ class EventTrackerService {
    * Get the coupon code(s) used with the given commerce order.
    *
    * @param \Drupal\commerce_order\Entity\OrderInterface $order
+   *   The order containing potential coupon code(s).
    *
    * @return string
+   *   The coupon values separated by comma.
    */
   private function getCouponCode(OrderInterface $order) {
     if (!$order->hasField('coupons') || $order->get('coupons')->isEmpty()) {
       return '';
     }
 
-    $couponCodes = array_map(function ($coupon) {
+    $coupon_codes = array_map(function ($coupon) {
       /** @var \Drupal\commerce_promotion\Entity\CouponInterface $coupon */
       return $coupon->getCode();
     }, $order->get('coupons')->referencedEntities());
 
-    if (count($couponCodes) === 1) {
-      return $couponCodes[0];
+    if (count($coupon_codes) === 1) {
+      return $coupon_codes[0];
     }
 
-    return implode(', ', $couponCodes);
+    return implode(', ', $coupon_codes);
   }
 
 }

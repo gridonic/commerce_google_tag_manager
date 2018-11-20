@@ -16,35 +16,46 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class KernelEventsSubscriber implements EventSubscriberInterface {
 
   /**
+   * The Commerce GTM event tracker.
+   *
    * @var \Drupal\commerce_google_tag_manager\EventTrackerService
    */
-  private $eventTrackerService;
+  private $eventTracker;
 
   /**
+   * The route match.
+   *
    * @var \Drupal\Core\Routing\RouteMatchInterface
    */
   private $routeMatch;
 
   /**
+   * The checkout order manager.
+   *
    * @var \Drupal\commerce_checkout\CheckoutOrderManagerInterface
    */
   private $checkoutOrderManager;
 
   /**
-   * @param \Drupal\commerce_google_tag_manager\EventTrackerService $eventTrackerService
-   * @param \Drupal\Core\Routing\RouteMatchInterface $routeMatch
-   * @param \Drupal\commerce_checkout\CheckoutOrderManagerInterface $checkoutOrderManager
+   * Constructs KernelEventsSubscriber object.
+   *
+   * @param \Drupal\commerce_google_tag_manager\EventTrackerService $event_tracker
+   *   The Commerce GTM event tracker.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The route match.
+   * @param \Drupal\commerce_checkout\CheckoutOrderManagerInterface $checkout_order_manager
+   *   The checkout order manager.
    */
-  public function __construct(EventTrackerService $eventTrackerService,
-                              RouteMatchInterface $routeMatch,
-                              CheckoutOrderManagerInterface $checkoutOrderManager) {
-    $this->eventTrackerService = $eventTrackerService;
-    $this->routeMatch = $routeMatch;
-    $this->checkoutOrderManager = $checkoutOrderManager;
+  public function __construct(EventTrackerService $event_tracker,
+                              RouteMatchInterface $route_match,
+                              CheckoutOrderManagerInterface $checkout_order_manager) {
+    $this->eventTracker = $event_tracker;
+    $this->routeMatch = $route_match;
+    $this->checkoutOrderManager = $checkout_order_manager;
   }
 
   /**
-   * @inheritdoc
+   * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
     return [
@@ -56,6 +67,7 @@ class KernelEventsSubscriber implements EventSubscriberInterface {
    * Tracks an Enhanced Ecommerce checkout event.
    *
    * @param \Symfony\Component\HttpKernel\Event\FinishRequestEvent $event
+   *   The request.
    */
   public function onFinishRequest(FinishRequestEvent $event) {
     if (!$this->shouldTrackCheckout($event)) {
@@ -70,7 +82,7 @@ class KernelEventsSubscriber implements EventSubscriberInterface {
 
     $checkoutStepIndex = $this->getCheckoutStepIndex($order);
     if ($checkoutStepIndex) {
-      $this->eventTrackerService->checkoutStep($checkoutStepIndex, $order);
+      $this->eventTracker->checkoutStep($checkoutStepIndex, $order);
     }
   }
 
@@ -78,8 +90,10 @@ class KernelEventsSubscriber implements EventSubscriberInterface {
    * Check if the current request matches the conditions to track the checkout.
    *
    * @param \Symfony\Component\HttpKernel\Event\FinishRequestEvent $event
+   *   The request.
    *
    * @return bool
+   *   Does this route should be tracked as "checkout".
    */
   private function shouldTrackCheckout(FinishRequestEvent $event) {
     if ($this->routeMatch->getRouteName() !== 'commerce_checkout.form') {
@@ -98,8 +112,10 @@ class KernelEventsSubscriber implements EventSubscriberInterface {
    * Returns an index for the current checkout step, starting at index 1.
    *
    * @param \Drupal\commerce_order\Entity\OrderInterface $order
+   *   The order entity.
    *
    * @return int
+   *   Get the Checkout step number.
    */
   private function getCheckoutStepIndex(OrderInterface $order) {
     $checkoutFlow = $this->checkoutOrderManager->getCheckoutFlow($order);
@@ -115,4 +131,5 @@ class KernelEventsSubscriber implements EventSubscriberInterface {
 
     return ++$currentStepIndex;
   }
+
 }

@@ -17,13 +17,15 @@ use Drupal\Tests\commerce_google_tag_manager\Traits\InvokeMethodTrait;
  * @group commerce_google_tag_manager
  * @group commerce_google_tag_manager_unit
  */
-class formatPriceTest extends UnitTestCase {
+class FormatPriceTest extends UnitTestCase {
   use InvokeMethodTrait;
 
   /**
+   * The Commerce GTM event tracker.
+   *
    * @var \Drupal\commerce_google_tag_manager\EventTrackerService
    */
-  private $ecommerceEventTrackerService;
+  private $eventTracker;
 
   /**
    * {@inheritdoc}
@@ -34,16 +36,16 @@ class formatPriceTest extends UnitTestCase {
     $event_storage = $this->prophesize(EventStorageService::class);
     $event_dispatcher = $this->prophesize(EventDispatcherInterface::class);
 
-    $this->ecommerceEventTrackerService = new EventTrackerService($event_storage->reveal(), $event_dispatcher->reveal());
+    $this->eventTracker = new EventTrackerService($event_storage->reveal(), $event_dispatcher->reveal());
   }
 
   /**
-   * ::covers formatPrice.
+   * @covers ::formatPrice
    *
    * @dataProvider pricesProvider
    */
   public function testFormatPrice($price, $expected) {
-    $result = $this->invokeMethod($this->ecommerceEventTrackerService, 'formatPrice', [$price]);
+    $result = $this->invokeMethod($this->eventTracker, 'formatPrice', [$price]);
     $this->assertEquals($expected, $result);
   }
 
@@ -55,7 +57,7 @@ class formatPriceTest extends UnitTestCase {
    */
   public function pricesProvider() {
     return [
-      # Default & standard behavior.
+      // Default & standard behavior.
       [
         0,
         0,
@@ -68,17 +70,17 @@ class formatPriceTest extends UnitTestCase {
         11.99,
         11.99,
       ],
-      # Number should be truncat to 2 decimals maximum.
+      // Number should be truncat to 2 decimals maximum.
       [
         123.123,
         123.12,
       ],
-      # Number should not be rounded up.
+      // Number should not be rounded up.
       [
         11.999,
         11.99,
       ],
-      # No Thousands separators should be present in the output.
+      // No Thousands separators should be present in the output.
       [
         43123,
         43123,
@@ -89,5 +91,5 @@ class formatPriceTest extends UnitTestCase {
       ],
     ];
   }
-}
 
+}
