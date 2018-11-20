@@ -8,10 +8,10 @@ namespace Drupal\commerce_google_tag_manager\Event;
 final class EnhancedEcommerceEvents {
 
   /**
-   * Event fired after mapping a commerce product to a product.
+   * Allows to alter the GTM Product field mapping.
    *
-   * This allows to change the mapping of fields or enhance products with custom
-   * dimensions or metrics.
+   * Allows alteration of field mapping from Commerce product to a GTM Product.
+   * Use this event to alter data Product before it gets pushed to data layer.
    *
    * @Event
    *
