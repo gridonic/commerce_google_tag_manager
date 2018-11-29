@@ -164,7 +164,6 @@ class AlterEventDataEventTest extends UnitTestCase {
                 'id' => '1',
                 'affiliation' => 'Commerce Website',
                 'revenue' => '11.99',
-                'shipping' => '0',
                 'coupon' => '',
               ],
               'products' => [
