@@ -15,6 +15,17 @@ use Drupal\commerce_google_tag_manager\Product;
  * @group commerce_google_tag_manager_kernel
  */
 class AlterProductEventTest extends CommerceKernelTestBase {
+
+  /**
+   * Modules to enable.
+   *
+   * @var array
+   */
+  public static $modules = [
+    'entity_reference_revisions',
+    'profile',
+  ];
+
   /**
    * The variations to test with.
    *
