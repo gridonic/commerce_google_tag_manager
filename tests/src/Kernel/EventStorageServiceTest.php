@@ -155,8 +155,6 @@ class EventStorageServiceTest extends CommerceKernelTestBase {
    * Asserts the events queue follows the FIFO (First in First out) pattern.
    */
   public function testAddEventFifoQueue() {
-    $this->testAddEvent();
-
     $this->eventStorage->addEvent($this->detailEvent);
     $this->eventStorage->addEvent($this->checkoutEvent);
     $events = $this->tempStore->get('events');
@@ -173,8 +171,6 @@ class EventStorageServiceTest extends CommerceKernelTestBase {
    * Asserts strictly same event aren't added twice in the events queue.
    */
   public function testAddEventSameSkipped() {
-    $this->testAddEvent();
-
     $this->eventStorage->addEvent($this->detailEvent);
     $this->eventStorage->addEvent($this->detailEvent);
     $events = $this->tempStore->get('events');
