@@ -159,11 +159,15 @@ class EventTrackerService {
    *   The removed quantity.
    */
   public function removeFromCart(OrderItemInterface $order_item, $quantity) {
+    $product = $this->buildProductFromOrderItem($order_item);
+
     $data = [
       'event' => self::EVENT_REMOVE_CART,
       'ecommerce' => [
         'remove' => [
-          'products' => $this->buildProductsFromOrderItems([$order_item]),
+          'products' => [
+            array_merge($product->toArray(), ['quantity' => $quantity]),
+          ],
         ],
       ],
     ];
