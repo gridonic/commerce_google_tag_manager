@@ -16,6 +16,10 @@ abstract class CommerceKernelTestBase extends DrupalCommerceKernelTestBase {
    */
   public static $modules = [
     'commerce_product',
+    'commerce_order',
+    'state_machine',
+    'commerce_checkout',
+    'commerce_google_tag_manager',
   ];
 
   /**
@@ -26,7 +30,9 @@ abstract class CommerceKernelTestBase extends DrupalCommerceKernelTestBase {
 
     $this->installEntitySchema('commerce_product_variation');
     $this->installEntitySchema('commerce_product');
-    $this->installConfig(['commerce_product']);
+    $this->installEntitySchema('commerce_order');
+    $this->installEntitySchema('commerce_order_item');
+    $this->installConfig(['commerce_product', 'commerce_order']);
   }
 
 }
