@@ -4,6 +4,9 @@ package: 'Commerce (contrib)'
 core: 8.x
 type: module
 dependencies:
-- drupal:google_tag
-- drupal:commerce
-- drupal:commerce_checkout
+  - drupal:google_tag
+  - drupal:commerce
+  - drupal:commerce_checkout
+
+test_dependencies:
+  - drupal:commerce_cart
