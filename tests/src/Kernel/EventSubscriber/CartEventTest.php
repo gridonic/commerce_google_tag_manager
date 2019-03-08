@@ -8,7 +8,7 @@ use Drupal\commerce_price\Price;
 use Drupal\commerce_product\Entity\ProductVariation;
 use Drupal\commerce_cart\Event\CartEntityAddEvent;
 use Drupal\commerce_cart\Event\CartOrderItemRemoveEvent;
-use Drupal\Tests\commerce_cart\Kernel\CartManagerTestTrait;
+use Drupal\Tests\commerce_cart\Traits\CartManagerTestTrait;
 
 /**
  * @coversDefaultClass \Drupal\commerce_google_tag_manager\EventSubscriber\CommerceEventsSubscriber
