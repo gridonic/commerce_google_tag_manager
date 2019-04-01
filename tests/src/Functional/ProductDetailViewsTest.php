@@ -105,7 +105,7 @@ class ProductDetailViewsTest extends CommerceBrowserTestBase {
     $this->assertResponse(200);
 
     $events = $this->tempStore->get('events');
-    $this->assertSame([], $events);
+    $this->assertNull($events);
   }
 
 }
