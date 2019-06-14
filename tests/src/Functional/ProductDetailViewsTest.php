@@ -69,7 +69,7 @@ class ProductDetailViewsTest extends CommerceBrowserTestBase {
     $this->product->addVariation($variation)->save();
 
     $this->drupalGet($this->product->toUrl()->toString());
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
 
     $events = $this->tempStore->get('events');
     $this->assertSame([
@@ -102,7 +102,7 @@ class ProductDetailViewsTest extends CommerceBrowserTestBase {
    */
   public function testMissingDefaultVariation() {
     $this->drupalGet($this->product->toUrl()->toString());
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
 
     $events = $this->tempStore->get('events');
     $this->assertNull($events);
