@@ -72,12 +72,12 @@ class EventsControllerTest extends CommerceBrowserTestBase {
   public function testGetEvents() {
     // Go to a product page to fire a EVENT_PRODUCT_DETAIL_VIEWS event.
     $this->drupalGet($this->product->toUrl()->toString());
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
 
     // Assert the previous event has been stored.
     $url = Url::fromRoute('commerce_google_tag_manager.events');
     $content = $this->drupalGet($url);
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
     $this->assertSame('[{"event":"productDetailViews","ecommerce":{"detail":{"actionField":{"list":""},"products":[{"name":"Lorem Ipsum","id":"1","price":"120.00","variant":"Lorem Ipsum"}]}}}]', (string) $content);
 
     // Assert stored events are flush after first fetch.
