@@ -329,7 +329,6 @@ class EventTrackerService {
    */
   private function buildProductFromProductVariation(ProductVariationInterface $product_variation) {
     $context = new Context($this->currentUser, $this->currentStore->getStore());
-    /** @var \Drupal\commerce_price\Price $price */
 
     $product = new Product();
     $product
@@ -338,9 +337,11 @@ class EventTrackerService {
       ->setVariant($product_variation->getTitle());
 
     // Ensure the price is available before using it.
+    /** @var \Drupal\commerce_price\Price $price */
     $price = $product_variation->getPrice();
     if ($price) {
       // Ensure the price is available before using it.
+	  /** @var \Drupal\commerce_price\Price $calculated_price */
       $calculated_price = $this->priceCalculator->calculate($product_variation, 1, $context)->getCalculatedPrice();
       $product->setPrice($this->formatPrice((float) $calculated_price->getNumber()));
     }
