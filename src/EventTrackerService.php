@@ -296,8 +296,13 @@ class EventTrackerService {
     $product
       ->setName($product_variation->getProduct()->getTitle())
       ->setId($product_variation->getProduct()->id())
-      ->setVariant($product_variation->getTitle())
-      ->setPrice($this->formatPrice((float) $product_variation->getPrice()->getNumber()));
+      ->setVariant($product_variation->getTitle());
+
+    // Ensure the price is available before using it.
+    $price = $product_variation->getPrice();
+    if ($price) {
+      $product->setPrice($this->formatPrice((float) $price->getNumber()));
+    }
 
     $event = new AlterProductEvent($product, $product_variation);
     $this->eventDispatcher->dispatch(EnhancedEcommerceEvents::ALTER_PRODUCT, $event);
