@@ -22,6 +22,7 @@ class EventTrackerServiceTest extends CommerceKernelTestBase {
    * {@inheritdoc}
    */
   public static $modules = [
+    'commerce_price_test',
     'entity_reference_revisions',
     'profile',
   ];
@@ -72,6 +73,30 @@ class EventTrackerServiceTest extends CommerceKernelTestBase {
 
     $result = $this->invokeMethod($this->eventTracker, 'buildProductFromProductVariation', [$variation]);
     $this->assertInstanceOf(Product::class, $result);
+    $this->assertEquals($result->getPrice(), 11);
+  }
+
+  /**
+   * @covers ::buildProductFromProductVariation
+   *
+   * @uses \Drupal\commerce_price_test\TestPriceResolver
+   */
+  public function testBuildProductFromProductVariationCalculatedPrice() {
+    // The variations to test with.
+    $variation = ProductVariation::create([
+      'type' => 'default',
+      // Only product starting with TEST_ will pass
+      // the Drupal\commerce_price_test\TestPriceResolver.
+      'sku' => 'TEST_CALCULATED_PRICE2',
+      'status' => TRUE,
+      'price'  => new Price('11.00', 'USD'),
+    ]);
+    $variation->save();
+    $this->product->addVariation($variation)->save();
+
+    $result = $this->invokeMethod($this->eventTracker, 'buildProductFromProductVariation', [$variation]);
+    $this->assertInstanceOf(Product::class, $result);
+    $this->assertEquals($result->getPrice(), 8);
   }
 
   /**
@@ -89,6 +114,7 @@ class EventTrackerServiceTest extends CommerceKernelTestBase {
 
     $result = $this->invokeMethod($this->eventTracker, 'buildProductFromProductVariation', [$variation]);
     $this->assertInstanceOf(Product::class, $result);
+    $this->assertNull($result->getPrice());
   }
 
 }

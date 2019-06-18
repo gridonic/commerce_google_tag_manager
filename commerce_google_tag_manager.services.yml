@@ -1,7 +1,7 @@
 services:
   commerce_google_tag_manager.event_tracker:
     class: Drupal\commerce_google_tag_manager\EventTrackerService
-    arguments: ['@commerce_google_tag_manager.event_storage', '@event_dispatcher']
+    arguments: ['@commerce_google_tag_manager.event_storage', '@event_dispatcher', '@commerce_store.current_store', '@current_user', '@commerce_order.price_calculator']
   commerce_google_tag_manager.event_storage:
     class: Drupal\commerce_google_tag_manager\EventStorageService
     arguments: ['@tempstore.private', '@event_dispatcher']

@@ -16,7 +16,6 @@ use Drupal\commerce_product\Entity\ProductVariation;
  * @group commerce
  * @group commerce_google_tag_manager
  * @group commerce_google_tag_manager_functional
- * @group kevin2
  */
 class EventsControllerTest extends CommerceBrowserTestBase {
 

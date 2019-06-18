@@ -9,6 +9,10 @@ use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_order\Entity\OrderItemInterface;
 use Drupal\commerce_product\Entity\ProductVariationInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Drupal\commerce_store\CurrentStoreInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\commerce_order\PriceCalculatorInterface;
+use Drupal\commerce\Context;
 
 /**
  * Track different events from Google's Enhanced Ecommerce.
@@ -41,18 +45,50 @@ class EventTrackerService {
   private $eventStorage;
 
   /**
+   * The current user.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  protected $currentUser;
+
+  /**
+   * The current store.
+   *
+   * @var \Drupal\commerce_store\CurrentStoreInterface
+   */
+  protected $currentStore;
+
+  /**
+   * The price calculator.
+   *
+   * @var \Drupal\commerce_order\PriceCalculatorInterface
+   */
+  protected $priceCalculator;
+
+  /**
    * Constructs the EventTrackerService service.
    *
    * @param \Drupal\commerce_google_tag_manager\EventStorageService $event_storage
    *   The Commerce GTM event storage.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
    *   The event dispatcher.
+   * @param \Drupal\commerce_store\CurrentStoreInterface $current_store
+   *   The current store.
+   * @param \Drupal\Core\Session\AccountInterface $current_user
+   *   The current user.
+   * @param \Drupal\commerce_order\PriceCalculatorInterface $price_calculator
+   *   The price calculator.
    */
   public function __construct(EventStorageService $event_storage,
-                              EventDispatcherInterface $event_dispatcher
-                              ) {
+                              EventDispatcherInterface $event_dispatcher,
+                              CurrentStoreInterface $current_store,
+                              AccountInterface $current_user,
+                              PriceCalculatorInterface $price_calculator) {
     $this->eventDispatcher = $event_dispatcher;
     $this->eventStorage = $event_storage;
+    $this->currentStore = $current_store;
+    $this->currentUser = $current_user;
+    $this->priceCalculator = $price_calculator;
   }
 
   /**
@@ -292,6 +328,9 @@ class EventTrackerService {
    *   The Enhanced Ecommerce product.
    */
   private function buildProductFromProductVariation(ProductVariationInterface $product_variation) {
+    $context = new Context($this->currentUser, $this->currentStore->getStore());
+    /** @var \Drupal\commerce_price\Price $price */
+
     $product = new Product();
     $product
       ->setName($product_variation->getProduct()->getTitle())
@@ -301,7 +340,9 @@ class EventTrackerService {
     // Ensure the price is available before using it.
     $price = $product_variation->getPrice();
     if ($price) {
-      $product->setPrice($this->formatPrice((float) $price->getNumber()));
+      // Ensure the price is available before using it.
+      $calculated_price = $this->priceCalculator->calculate($product_variation, 1, $context)->getCalculatedPrice();
+      $product->setPrice($this->formatPrice((float) $calculated_price->getNumber()));
     }
 
     $event = new AlterProductEvent($product, $product_variation);

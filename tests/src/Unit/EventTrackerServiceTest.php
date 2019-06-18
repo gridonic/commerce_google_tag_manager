@@ -8,10 +8,15 @@ use Drupal\commerce_price\Price;
 use Drupal\commerce_product\Entity\ProductInterface;
 use Drupal\commerce_product\Entity\ProductVariationInterface;
 use Drupal\commerce_store\Entity\StoreInterface;
+use Drupal\commerce_order\PriceCalculatorResult;
 use Drupal\Tests\UnitTestCase;
 use Drupal\commerce_google_tag_manager\EventTrackerService;
 use Drupal\commerce_google_tag_manager\EventStorageService;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Drupal\commerce_store\CurrentStoreInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\commerce_order\PriceCalculatorInterface;
+use Prophecy\Argument;
 
 /**
  * Tests for the EventTracker service.
@@ -49,8 +54,18 @@ class EventTrackerServiceTest extends UnitTestCase {
       ->getMock();
 
     $event_dispatcher = $this->prophesize(EventDispatcherInterface::class);
+    $current_store = $this->prophesize(CurrentStoreInterface::class);
+    $current_user = $this->prophesize(AccountInterface::class);
+    $price_calculator = $this->prophesize(PriceCalculatorInterface::class);
 
-    $this->eventTracker = new EventTrackerService($this->eventStorage, $event_dispatcher->reveal());
+    $store = $this->prophesize(StoreInterface::class);
+    $current_store->getStore()->willReturn($store->reveal());
+
+    $price = new Price('50.00', 'USD');
+    $price_calc_result = new PriceCalculatorResult($price, $price);
+    $price_calculator->calculate(Argument::any(), Argument::any(), Argument::any())->willReturn($price_calc_result);
+
+    $this->eventTracker = new EventTrackerService($this->eventStorage, $event_dispatcher->reveal(), $current_store->reveal(), $current_user->reveal(), $price_calculator->reveal());
   }
 
   /**
