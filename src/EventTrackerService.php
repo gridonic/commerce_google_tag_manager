@@ -49,7 +49,7 @@ class EventTrackerService {
    *
    * @var \Drupal\Core\Session\AccountInterface
    */
-  protected $currentUser;
+  private $currentUser;
 
   /**
    * The current store.
