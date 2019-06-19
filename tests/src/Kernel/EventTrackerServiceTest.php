@@ -89,7 +89,7 @@ class EventTrackerServiceTest extends CommerceKernelTestBase {
       // the Drupal\commerce_price_test\TestPriceResolver.
       'sku' => 'TEST_CALCULATED_PRICE2',
       'status' => TRUE,
-      'price'  => new Price('11.00', 'USD'),
+      'price' => new Price('11.00', 'USD'),
     ]);
     $variation->save();
     $this->product->addVariation($variation)->save();
