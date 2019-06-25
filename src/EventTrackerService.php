@@ -49,7 +49,7 @@ class EventTrackerService {
    *
    * @var \Drupal\Core\Session\AccountInterface
    */
-  protected $currentUser;
+  private $currentUser;
 
   /**
    * The current store.
@@ -329,7 +329,6 @@ class EventTrackerService {
    */
   private function buildProductFromProductVariation(ProductVariationInterface $product_variation) {
     $context = new Context($this->currentUser, $this->currentStore->getStore());
-    /** @var \Drupal\commerce_price\Price $price */
 
     $product = new Product();
     $product
@@ -338,6 +337,7 @@ class EventTrackerService {
       ->setVariant($product_variation->getTitle());
 
     // Get price based on resolver(s).
+	  /** @var \Drupal\commerce_price\Price $calculated_price */
     $calculated_price = $this->priceCalculator->calculate($product_variation, 1, $context)->getCalculatedPrice();
     if ($calculated_price) {
       $product->setPrice($this->formatPrice((float) $calculated_price->getNumber()));
