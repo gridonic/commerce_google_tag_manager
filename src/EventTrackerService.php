@@ -337,11 +337,9 @@ class EventTrackerService {
       ->setId($product_variation->getProduct()->id())
       ->setVariant($product_variation->getTitle());
 
-    // Ensure the price is available before using it.
-    $price = $product_variation->getPrice();
-    if ($price) {
-      // Ensure the price is available before using it.
-      $calculated_price = $this->priceCalculator->calculate($product_variation, 1, $context)->getCalculatedPrice();
+    // Get price based on resolver(s).
+    $calculated_price = $this->priceCalculator->calculate($product_variation, 1, $context)->getCalculatedPrice();
+    if ($calculated_price) {
       $product->setPrice($this->formatPrice((float) $calculated_price->getNumber()));
     }
 
