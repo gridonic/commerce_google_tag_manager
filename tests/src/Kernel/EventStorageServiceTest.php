@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\commerce_google_tag_manager\Kernel;
 
-use Drupal\Tests\commerce\Kernel\CommerceKernelTestBase;
 use Drupal\commerce_google_tag_manager\EventTrackerService;
 
 /**
@@ -18,8 +17,9 @@ class EventStorageServiceTest extends CommerceKernelTestBase {
    * {@inheritdoc}
    */
   public static $modules = [
-    'commerce_checkout',
-    'commerce_google_tag_manager',
+    'state_machine',
+    'entity_reference_revisions',
+    'profile',
   ];
 
   /**
@@ -55,6 +55,7 @@ class EventStorageServiceTest extends CommerceKernelTestBase {
    */
   protected function setUp() {
     parent::setUp();
+    $this->installEntitySchema('profile');
 
     $this->installSchema('system', ['key_value_expire']);
 
