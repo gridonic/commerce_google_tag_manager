@@ -279,8 +279,8 @@ class EventTrackerService {
           'actionField' => [
             'id' => $order->getOrderNumber(),
             'affiliation' => $order->getStore()->getName(),
-            'revenue' => $this->formatPrice((float) $order->getTotalPrice()->getNumber()),
-            'shipping' => $this->formatPrice($this->calculateShipping($order)),
+            'revenue' => self::formatPrice((float) $order->getTotalPrice()->getNumber()),
+            'shipping' => self::formatPrice($this->calculateShipping($order)),
             'coupon' => $this->getCouponCode($order),
           ],
           'products' => $this->buildProductsFromOrderItems($order->getItems()),
@@ -312,7 +312,7 @@ class EventTrackerService {
       $product = (new Product())
         ->setName($order_item->getTitle())
         ->setId($purchased_entity->id())
-        ->setPrice($this->formatPrice((float) $order_item->getTotalPrice()->getNumber()));
+        ->setPrice(self::formatPrice((float) $order_item->getTotalPrice()->getNumber()));
     }
 
     return $product;
@@ -340,7 +340,7 @@ class EventTrackerService {
 	  /** @var \Drupal\commerce_price\Price $calculated_price */
     $calculated_price = $this->priceCalculator->calculate($product_variation, 1, $context)->getCalculatedPrice();
     if ($calculated_price) {
-      $product->setPrice($this->formatPrice((float) $calculated_price->getNumber()));
+      $product->setPrice(self::formatPrice((float) $calculated_price->getNumber()));
     }
 
     $event = new AlterProductEvent($product, $product_variation);
@@ -396,7 +396,7 @@ class EventTrackerService {
    * @return string
    *   The formatted price.
    */
-  private function formatPrice($price) {
+  public static function formatPrice($price) {
     if ($price == 0) {
       return '0';
     }
