@@ -8,7 +8,7 @@ use Drupal\commerce_product\Entity\Product;
 use Drupal\commerce_product\Entity\ProductVariation;
 
 /**
- * Cover hook_entity_view() implemented by commerce_google_tag_manager.module.
+ * @coversDefaultClass \Drupal\commerce_google_tag_manager\EventSubscriber\CommerceEventsSubscriber
  *
  * @group commerce
  * @group commerce_google_tag_manager
@@ -52,12 +52,7 @@ class ProductDetailViewsTest extends CommerceBrowserTestBase {
       'title' => 'Lorem Ipsum',
     ]);
     $this->product->save();
-  }
 
-  /**
-   * Cover commerce_google_tag_manager_commerce_product_view.
-   */
-  public function testProductDetailViews() {
     $variation = ProductVariation::create([
       'type'   => 'default',
       'sku'    => 'lorem-ipsum-120',
@@ -67,7 +62,12 @@ class ProductDetailViewsTest extends CommerceBrowserTestBase {
     ]);
 
     $this->product->addVariation($variation)->save();
+  }
 
+  /**
+   * @covers ::trackProductView
+   */
+  public function testProductDetailViews() {
     $this->drupalGet($this->product->toUrl()->toString());
     $this->assertSession()->statusCodeEquals(200);
 
@@ -95,17 +95,86 @@ class ProductDetailViewsTest extends CommerceBrowserTestBase {
   }
 
   /**
-   * Cover commerce_google_tag_manager_commerce_product_view.
+   * @covers ::trackProductView
    *
    * Test that the module does not track the productDetailViews event if
    * no default variation exists.
    */
   public function testMissingDefaultVariation() {
+    $this->product->variations = [];
+    $this->product->save();
+
     $this->drupalGet($this->product->toUrl()->toString());
     $this->assertSession()->statusCodeEquals(200);
 
     $events = $this->tempStore->get('events');
     $this->assertNull($events);
+  }
+
+  /**
+   * @covers ::trackProductView
+   *
+   * Ensure caching of product view don't prevent event to be fired.
+   */
+  public function testCachability() {
+    // Login as a normal user for cachability.
+    $normalUser = $this->drupalCreateUser();
+    $this->drupalLogin($normalUser);
+
+    // Ensure the storage is empty before any navigation occurs.
+    $events = $this->tempStore->get('events');
+    $this->assertEmpty($events);
+
+    $this->drupalGet($this->product->toUrl()->toString());
+    $events = $this->tempStore->get('events');
+    $this->assertSame([
+      'f8e84d8ee071e2fb885d0dc755dd73ab' => [
+        'event' => 'productDetailViews',
+        'ecommerce' => [
+          'detail' => [
+            'actionField' => [
+              'list' => '',
+            ],
+            'products' => [
+              0 => [
+                'name'    => 'Lorem Ipsum',
+                'id'      => '1',
+                'price'   => '120.00',
+                'variant' => 'Lorem Ipsum',
+              ],
+            ],
+          ],
+        ],
+      ],
+    ], $events);
+
+    // Reset the event storage.
+    $this->tempStore->set('events', NULL);
+
+    // Reload the same page a second time to ensure the event will be fired.
+    $this->drupalGet($this->product->toUrl()->toString());
+    $events = $this->tempStore->get('events');
+    $this->assertSame([
+      'f8e84d8ee071e2fb885d0dc755dd73ab' => [
+        'event' => 'productDetailViews',
+        'ecommerce' => [
+          'detail' => [
+            'actionField' => [
+              'list' => '',
+            ],
+            'products' => [
+              0 => [
+                'name'    => 'Lorem Ipsum',
+                'id'      => '1',
+                'price'   => '120.00',
+                'variant' => 'Lorem Ipsum',
+              ],
+            ],
+          ],
+        ],
+      ],
+    ], $events);
+
   }
 
 }
