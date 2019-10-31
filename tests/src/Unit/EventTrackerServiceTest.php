@@ -262,6 +262,7 @@ class EventTrackerServiceTest extends UnitTestCase {
               'affiliation' => 'My Shop',
               'revenue' => '50.00',
               'shipping' => '0.00',
+              'tax' => '0',
               'coupon' => '',
             ],
             'products' => [
@@ -348,6 +349,7 @@ class EventTrackerServiceTest extends UnitTestCase {
     $order->hasField('shipments')->willReturn(FALSE);
     $order->hasField('coupons')->willReturn(FALSE);
     $order->getTotalPrice()->willReturn($total_price);
+    $order->collectAdjustments()->willReturn([]);
 
     return $order;
   }

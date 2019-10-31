@@ -5,6 +5,7 @@ namespace Drupal\commerce_google_tag_manager;
 use Drupal\commerce_google_tag_manager\Event\AlterProductEvent;
 use Drupal\commerce_google_tag_manager\Event\EnhancedEcommerceEvents;
 use Drupal\commerce_google_tag_manager\Event\TrackCheckoutStepEvent;
+use Drupal\commerce_order\Adjustment;
 use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_order\Entity\OrderItemInterface;
 use Drupal\commerce_product\Entity\ProductVariationInterface;
@@ -279,8 +280,10 @@ class EventTrackerService {
           'actionField' => [
             'id' => $order->getOrderNumber(),
             'affiliation' => $order->getStore()->getName(),
+            // The revenu should be the total value (incl. tax and shipping).
             'revenue' => self::formatPrice((float) $order->getTotalPrice()->getNumber()),
             'shipping' => self::formatPrice($this->calculateShipping($order)),
+            'tax' => $this->formatPrice($this->calculateTax($order)),
             'coupon' => $this->getCouponCode($order),
           ],
           'products' => $this->buildProductsFromOrderItems($order->getItems()),
@@ -288,7 +291,6 @@ class EventTrackerService {
       ],
     ];
 
-    // TODO: Add tax.
     $this->eventStorage->addEvent($data);
   }
 
@@ -337,7 +339,7 @@ class EventTrackerService {
       ->setVariant($product_variation->getTitle());
 
     // Get price based on resolver(s).
-	  /** @var \Drupal\commerce_price\Price $calculated_price */
+    /** @var \Drupal\commerce_price\Price $calculated_price */
     $calculated_price = $this->priceCalculator->calculate($product_variation, 1, $context)->getCalculatedPrice();
     if ($calculated_price) {
       $product->setPrice(self::formatPrice((float) $calculated_price->getNumber()));
@@ -406,6 +408,29 @@ class EventTrackerService {
 
     // Format the number as requested by Google's Enhanced Ecommerce.
     return number_format($number, 2, '.', '');
+  }
+
+  /**
+   * Calculate the tax costs from the given order.
+   *
+   * @param \Drupal\commerce_order\Entity\OrderInterface $order
+   *   The order containing potential tax.
+   *
+   * @return float
+   *   The tax costs.
+   */
+  private function calculateTax(OrderInterface $order) {
+    $tax_adjustments = array_filter($order->collectAdjustments(), function (Adjustment $adjustment) {
+      return ($adjustment->getType() === 'tax') && (!empty($adjustment->getSourceId()));
+    });
+
+    $total = 0;
+    /** @var \Drupal\commerce_order\Adjustment $tax_adjustment */
+    foreach ($tax_adjustments as $tax_adjustment) {
+      $total += (float) $tax_adjustment->getAmount()->getNumber();
+    }
+
+    return $total;
   }
 
   /**
