@@ -7,7 +7,7 @@ services:
     arguments: ['@tempstore.private', '@event_dispatcher']
   commerce_google_tag_manager.commerce_events_subscriber:
     class: Drupal\commerce_google_tag_manager\EventSubscriber\CommerceEventsSubscriber
-    arguments: ['@commerce_google_tag_manager.event_tracker']
+    arguments: ['@commerce_google_tag_manager.event_tracker', '@current_route_match']
     tags:
     - { name: 'event_subscriber' }
   commerce_google_tag_manager.kernel_events_subscriber:

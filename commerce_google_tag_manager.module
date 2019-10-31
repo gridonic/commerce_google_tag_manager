@@ -24,22 +24,3 @@ function commerce_google_tag_manager_page_attachments(array &$page) {
   $cache->addCacheableDependency(Drupal::config('google_tag.settings'));
   $cache->applyTo($page);
 }
-
-/**
- * Track Enhanced Ecommerce product detail view.
- *
- * Implements hook_entity_view().
- */
-function commerce_google_tag_manager_commerce_product_view(&$build) {
-  if (Drupal::request()->getMethod() === 'GET' && $build['#view_mode'] === 'full') {
-    /** @var \Drupal\commerce_product\Entity\ProductInterface $product */
-    $product = $build['#commerce_product'];
-    $default_variation = $product->getDefaultVariation();
-
-    if ($default_variation) {
-      /** @var \Drupal\commerce_google_tag_manager\EventTrackerService $event_tracker */
-      $event_tracker = Drupal::service('commerce_google_tag_manager.event_tracker');
-      $event_tracker->productDetailViews([$default_variation]);
-    }
-  }
-}
