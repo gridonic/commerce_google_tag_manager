@@ -20,6 +20,7 @@ abstract class CommerceKernelTestBase extends DrupalCommerceKernelTestBase {
     'state_machine',
     'commerce_checkout',
     'commerce_google_tag_manager',
+    'commerce_number_pattern',
   ];
 
   /**
@@ -33,6 +34,7 @@ abstract class CommerceKernelTestBase extends DrupalCommerceKernelTestBase {
     $this->installEntitySchema('commerce_order');
     $this->installEntitySchema('commerce_order_item');
     $this->installConfig(['commerce_product', 'commerce_order']);
+    $this->installSchema('commerce_number_pattern', ['commerce_number_pattern_sequence']);
   }
 
 }
