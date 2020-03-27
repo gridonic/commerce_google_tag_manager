@@ -162,6 +162,43 @@ class EventTrackerServiceTest extends UnitTestCase {
   }
 
   /**
+   * @covers ::addToCart
+   */
+  public function testAddToCartNoPurchasedEntity() {
+    // Assert the event is trigger if the purchased entity is missing.
+    $order_item = $this->prophesize(OrderItemInterface::class);
+    $order_item->getTitle()->shouldBeCalledTimes(1)
+      ->willReturn('Order item title');
+    $order_item->getPurchasedEntity()->shouldBeCalledTimes(1)
+      ->willReturn(NULL);
+    $order_item->getPurchasedEntityId()->shouldBeCalledTimes(1)
+      ->willReturn(NULL);
+    $order_item->getTotalPrice()->shouldBeCalledTimes(2)
+      ->willReturn(new Price('10', 'CHF'));
+
+    $this->eventStorage
+      ->expects($this->once())
+      ->method('addEvent')
+      ->with([
+        'event' => EventTrackerService::EVENT_ADD_CART,
+        'ecommerce' => [
+          'currencyCode' => 'CHF',
+          'add' => [
+            'products' => [
+              [
+                'name' => 'Order item title',
+                'price' => '10.00',
+                'quantity' => 1,
+              ],
+            ],
+          ],
+        ],
+      ]);
+
+    $this->eventTracker->addToCart($order_item->reveal(), 1);
+  }
+
+  /**
    * @covers ::removeFromCart
    *
    * @dataProvider productVariationProvider

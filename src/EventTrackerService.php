@@ -313,7 +313,7 @@ class EventTrackerService {
       // The purchased entity is not a product variation.
       $product = (new Product())
         ->setName($order_item->getTitle())
-        ->setId($purchased_entity->id())
+        ->setId($order_item->getPurchasedEntityId())
         ->setPrice(self::formatPrice((float) $order_item->getTotalPrice()->getNumber()));
     }
 
