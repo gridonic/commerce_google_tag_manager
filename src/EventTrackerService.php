@@ -3,6 +3,7 @@
 namespace Drupal\commerce_google_tag_manager;
 
 use Drupal\commerce_google_tag_manager\Event\AlterProductEvent;
+use Drupal\commerce_google_tag_manager\Event\AlterProductPurchasedEntityEvent;
 use Drupal\commerce_google_tag_manager\Event\EnhancedEcommerceEvents;
 use Drupal\commerce_google_tag_manager\Event\TrackCheckoutStepEvent;
 use Drupal\commerce_order\Adjustment;
@@ -315,6 +316,9 @@ class EventTrackerService {
         ->setName($order_item->getTitle())
         ->setId($order_item->getPurchasedEntityId())
         ->setPrice(self::formatPrice((float) $order_item->getTotalPrice()->getNumber()));
+
+      $event = new AlterProductPurchasedEntityEvent($product, $order_item, $purchased_entity);
+      $this->eventDispatcher->dispatch(EnhancedEcommerceEvents::ALTER_PRODUCT_PURCHASED_ENTITY, $event);
     }
 
     return $product;

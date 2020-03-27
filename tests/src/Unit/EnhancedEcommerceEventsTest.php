@@ -36,6 +36,10 @@ class EnhancedEcommerceEventsTest extends UnitTestCase {
         'commerce_google_tag_manager.alter_product',
       ],
       [
+        EnhancedEcommerceEvents::ALTER_PRODUCT_PURCHASED_ENTITY,
+        'commerce_google_tag_manager.alter_product_purchased_entity',
+      ],
+      [
         EnhancedEcommerceEvents::ALTER_EVENT_DATA,
         'commerce_google_tag_manager.alter_event_data',
       ],
