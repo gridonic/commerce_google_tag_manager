@@ -10,7 +10,7 @@
 Github repo
 
 ```bash
-git remote add github https://github.com/gridonic/commerce_google_tag_manager
+git remote add github git@github.com:gridonic/commerce_google_tag_manager.git
 ```
 
 Drupal repo
