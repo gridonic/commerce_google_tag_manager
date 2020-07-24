@@ -2,6 +2,10 @@
 
 Provides Commerce integration for Enhanced Ecommerce via Google Tag Manager.
 
+|       Travis-CI        |        Style-CI         |        Downloads        |         Releases         |
+|:----------------------:|:-----------------------:|:-----------------------:|:------------------------:|
+| [![Travis](https://travis-ci.org/gridonic/commerce_google_tag_manager.svg?branch=8.x-2.x)](https://travis-ci.org/gridonic/commerce_google_tag_manager) | [![StyleCI](https://styleci.io/repos/85471768/shield)](https://styleci.io/repos/190755687) | [![Downloads](https://img.shields.io/badge/downloads-8.x--2.0-green.svg?style=flat-square)](https://ftp.drupal.org/files/projects/commerce_google_tag_manager-8.x-2.x-dev.tar.gz) | [![Latest Stable Version](https://img.shields.io/badge/release-v2.0-blue.svg?style=flat-square)](https://www.drupal.org/project/commerce_google_tag_manager/releases) |
+
 ## Features
 
 The module tracks the following [Enhanced Ecommerce](https://developers.google.com/tag-manager/enhanced-ecommerce)
@@ -70,8 +74,8 @@ must upgrade to `8.x-2.x` version of **Commerce Google Tag Manager**.
 
 ## Which version should I use?
 
-|Drupal Core|Commerce Google Tag Manager|Drupal Commerce|Drupal Google Tag
+|Drupal Core|Commerce Google Tag Manager|Drupal Commerce|Drupal Google Tag|
 |:---------:|:-----|:--------------|:--------------|
 |8.7.x      |1.x   |2.8            |1.3            |
 |8.8.x      |2.x   |2.8            |1.3            |
-|9.x        |2.x   |2.20           |1.4            |
+|9.x        |2.x   |2.20           |1.4           |
