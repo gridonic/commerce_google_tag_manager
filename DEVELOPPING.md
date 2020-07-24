@@ -26,24 +26,29 @@ globally on your environment:
 
 - drush
 - Latest dev release of Drupal 8.x.
+- docker
+- docker-compose
+
+### Project bootstrap
+
+Once run, you will be able to access to your fresh installed Drupal on `localhost::8888`.
+
+    docker-compose build --pull --build-arg BASE_IMAGE_TAG=8.9 drupal
+    (get a coffee, this will take some time...)
+    docker-compose up --build -d drupal
+    docker-compose exec -u www-data drupal drush site-install standard --db-url="mysql://drupal:drupal@db/drupal" --site-name=Example -y
+    
+    # You may be interesed by reseting the admin passowrd of your Docker and install the module using those cmd.
+    docker-compose exec drupal drush user:password admin admin
+    docker-compose exec drupal drush en commerce_google_tag_manager
 
 ## 🏆 Tests
 
-You must provide a `SIMPLETEST_BASE_URL`, Eg. `http://localhost`.
-You must provide a `SIMPLETEST_DB`, Eg. `sqlite://localhost/build/commerce_google_tag_manager.sqlite`.
+We use the [Docker for Drupal Contrib images](https://hub.docker.com/r/wengerk/drupal-for-contrib) to run testing on our project.
 
-Run the functional tests:
+Run testing by stopping at first failure using the following command:
 
-```bash
-# You must be on the drupal-root folder - usually /web.
-$ cd web
-$ SIMPLETEST_DB="sqlite://localhost//tmp/commerce_google_tag_manager.sqlite" \
-SIMPLETEST_BASE_URL='http://sandbox.test' \
-BROWSERTEST_OUTPUT_DIRECTORY="/path/to/webroot/browser_output" \
-../vendor/bin/phpunit -c core \
---group commerce_google_tag_manager \
---printer="\Drupal\Tests\Listeners\HtmlOutputPrinter" --stop-on-error
-```
+    docker-compose exec -u www-data drupal phpunit --group=commerce_google_tag_manager --no-coverage --stop-on-failure
 
 ## 🚔 Check Drupal coding standards & Drupal best practices
 
