@@ -59,3 +59,19 @@ options for the existing Google Analytics setting.
 * Verify that the Enhanced Ecommerce tags are fired e.g. by visiting a product page, adding 
 products to the cart or going through the checkout process.
 * Check the Ecommerce reports in Google Analytics.
+
+## Versions
+
+Commerce Google Tag Manager is available for both Drupal 8 & Drupal 9 !
+
+The version `8.x-1.x` is not compatible with Drupal `8.8.x`.
+Drupal `8.8.x` brings some breaking change with tests and so you
+must upgrade to `8.x-2.x` version of **Commerce Google Tag Manager**.
+
+## Which version should I use?
+
+|Drupal Core|Commerce Google Tag Manager|Drupal Commerce|Drupal Google Tag
+|:---------:|:-----|:--------------|:--------------|
+|8.7.x      |1.x   |2.8            |1.3            |
+|8.8.x      |2.x   |2.8            |1.3            |
+|9.x        |2.x   |2.20           |1.4            |

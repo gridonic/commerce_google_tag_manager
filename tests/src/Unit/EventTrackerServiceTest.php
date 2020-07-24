@@ -295,10 +295,10 @@ class EventTrackerServiceTest extends UnitTestCase {
         'ecommerce' => [
           'purchase' => [
             'actionField' => [
-              'id' => '321',
+              'id' => 321,
               'affiliation' => 'My Shop',
               'revenue' => '50.00',
-              'shipping' => '0.00',
+              'shipping' => '0',
               'tax' => '0',
               'coupon' => '',
             ],

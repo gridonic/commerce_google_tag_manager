@@ -119,7 +119,7 @@ class EventStorageServiceTest extends CommerceKernelTestBase {
   public function testGetEventsEmpty() {
     $this->tempStore->set('events', NULL);
     $result = $this->eventStorage->getEvents();
-    $this->assertInternalType('array', $result);
+    $this->assertIsArray($result);
     $this->assertEmpty($result);
   }
 
@@ -144,7 +144,7 @@ class EventStorageServiceTest extends CommerceKernelTestBase {
     $this->eventStorage->addEvent($this->detailEvent);
 
     $result = $this->tempStore->get('events');
-    $this->assertInternalType('array', $result);
+    $this->assertIsArray($result);
     $this->assertSame([
       '0e05cdf318b5832a7caf62ad11d386f4' => $this->detailEvent,
     ], $result);

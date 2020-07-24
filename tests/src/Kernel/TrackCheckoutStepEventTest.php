@@ -90,7 +90,7 @@ class TrackCheckoutStepEventTest extends CommerceKernelTestBase {
    */
   public function testGetStepIndex() {
     $event = new TrackCheckoutStepEvent(1, $this->order);
-    $this->assertInternalType('integer', $event->getStepIndex());
+    $this->assertIsInt($event->getStepIndex());
     $this->assertEquals(1, $event->getStepIndex());
   }
 
