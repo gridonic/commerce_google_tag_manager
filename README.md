@@ -2,9 +2,9 @@
 
 Provides Commerce integration for Enhanced Ecommerce via Google Tag Manager.
 
-|       Travis-CI        |        Style-CI         |        Downloads        |         Releases         |
+|       Test-CI        |        Style-CI         |        Downloads        |         Releases         |
 |:----------------------:|:-----------------------:|:-----------------------:|:------------------------:|
-| [![Travis](https://travis-ci.org/gridonic/commerce_google_tag_manager.svg?branch=8.x-2.x)](https://travis-ci.org/gridonic/commerce_google_tag_manager) | [![StyleCI](https://styleci.io/repos/85471768/shield)](https://styleci.io/repos/190755687) | [![Downloads](https://img.shields.io/badge/downloads-8.x--2.0-green.svg?style=flat-square)](https://ftp.drupal.org/files/projects/commerce_google_tag_manager-8.x-2.x-dev.tar.gz) | [![Latest Stable Version](https://img.shields.io/badge/release-v2.0-blue.svg?style=flat-square)](https://www.drupal.org/project/commerce_google_tag_manager/releases) |
+| [![Build Status](https://github.com/gridonic/commerce_google_tag_manager/actions/workflows/ci.yml/badge.svg)](https://github.com/gridonic/commerce_google_tag_manager/actions/workflows/ci.yml) | [![Code styles](https://github.com/gridonic/commerce_google_tag_manager/actions/workflows/styles.yml/badge.svg)](https://github.com/gridonic/commerce_google_tag_manager/actions/workflows/styles.yml) | [![Downloads](https://img.shields.io/badge/downloads-8.x--2.0-green.svg?style=flat-square)](https://ftp.drupal.org/files/projects/commerce_google_tag_manager-8.x-2.x-dev.tar.gz) | [![Latest Stable Version](https://img.shields.io/badge/release-v2.0-blue.svg?style=flat-square)](https://www.drupal.org/project/commerce_google_tag_manager/releases) |
 
 ## Features
 
@@ -29,7 +29,7 @@ handled inside Google Analytics and Google Tag Manager.
 ### Google Analytics
 
 * Enable `Ecommerce` and `Enhanced Ecommerce Reporting` in the settings of your property
-* Add labels for each checkout step under `Checkout Labeling` (optional) 
+* Add labels for each checkout step under `Checkout Labeling` (optional)
 
 ### Google Tag Manager
 
@@ -60,7 +60,7 @@ options for the existing Google Analytics setting.
 
 * Enable Preview in Google Tag Manager
 * In the same browser, navigate to the website and check that the debug window is displayed
-* Verify that the Enhanced Ecommerce tags are fired e.g. by visiting a product page, adding 
+* Verify that the Enhanced Ecommerce tags are fired e.g. by visiting a product page, adding
 products to the cart or going through the checkout process.
 * Check the Ecommerce reports in Google Analytics.
 

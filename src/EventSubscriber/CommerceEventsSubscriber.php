@@ -52,9 +52,10 @@ class CommerceEventsSubscriber implements EventSubscriberInterface {
       CartEvents::CART_ENTITY_ADD => 'trackCartAdd',
       CartEvents::CART_ORDER_ITEM_REMOVE => 'trackCartRemove',
       'commerce_order.place.post_transition' => 'trackPurchase',
-      // trackProductView should run before Dynamic Page Cache, which has priority 27
-      // see Drupal\dynamic_page_cache\EventSubscriber\DynamicPageCacheSubscriber
-      KernelEvents::REQUEST => ['trackProductView', 28]
+       // trackProductView should run before Dynamic Page Cache, which has
+       // priority 27.
+       // @see \Drupal\dynamic_page_cache\EventSubscriber\DynamicPageCacheSubscriber.
+      KernelEvents::REQUEST => ['trackProductView', 28],
     ];
   }
 
