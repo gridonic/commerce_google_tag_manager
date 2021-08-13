@@ -115,7 +115,6 @@ class EventTrackerServiceTest extends CommerceKernelTestBase {
     $this->product->addVariation($variation)->save();
 
     $this->expectException(\TypeError::class);
-    $this->expectExceptionMessage('Argument 1 passed to Drupal\commerce_order\PriceCalculatorResult::__construct() must be an instance of Drupal\commerce_price\Price, null given');
 
     $this->invokeMethod($this->eventTracker, 'buildProductFromProductVariation', [$variation]);
   }
