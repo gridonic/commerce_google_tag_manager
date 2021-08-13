@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\commerce_google_tag_manager\Kernel;
 
+use Drupal\Tests\commerce_google_tag_manager\Traits\DeprecationSuppressionTrait;
 use Drupal\Tests\commerce_google_tag_manager\Traits\InvokeMethodTrait;
 use Drupal\commerce_price\Price;
 use Drupal\commerce_product\Entity\Product as CommerceProduct;
@@ -17,6 +18,7 @@ use Drupal\commerce_google_tag_manager\Product;
  */
 class EventTrackerServiceTest extends CommerceKernelTestBase {
   use InvokeMethodTrait;
+  use DeprecationSuppressionTrait;
 
   /**
    * {@inheritdoc}
@@ -113,7 +115,6 @@ class EventTrackerServiceTest extends CommerceKernelTestBase {
     $this->product->addVariation($variation)->save();
 
     $this->expectException(\TypeError::class);
-    $this->expectExceptionMessage('Argument 1 passed to Drupal\commerce_order\PriceCalculatorResult::__construct() must be an instance of Drupal\commerce_price\Price, null given');
 
     $this->invokeMethod($this->eventTracker, 'buildProductFromProductVariation', [$variation]);
   }

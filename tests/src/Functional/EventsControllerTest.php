@@ -3,6 +3,7 @@
 namespace Drupal\Tests\commerce_google_tag_manager\Functional;
 
 use Drupal\Tests\commerce\Functional\CommerceBrowserTestBase;
+use Drupal\Tests\commerce_google_tag_manager\Traits\DeprecationSuppressionTrait;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 use Drupal\Core\Url;
@@ -18,6 +19,7 @@ use Drupal\commerce_product\Entity\ProductVariation;
  * @group commerce_google_tag_manager_functional
  */
 class EventsControllerTest extends CommerceBrowserTestBase {
+  use DeprecationSuppressionTrait;
 
   /**
    * The product to test againts.

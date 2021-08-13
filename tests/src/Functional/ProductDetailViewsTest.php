@@ -6,6 +6,7 @@ use Drupal\Tests\commerce\Functional\CommerceBrowserTestBase;
 use Drupal\commerce_price\Price;
 use Drupal\commerce_product\Entity\Product;
 use Drupal\commerce_product\Entity\ProductVariation;
+use Drupal\Tests\commerce_google_tag_manager\Traits\DeprecationSuppressionTrait;
 
 /**
  * @coversDefaultClass \Drupal\commerce_google_tag_manager\EventSubscriber\CommerceEventsSubscriber
@@ -15,6 +16,7 @@ use Drupal\commerce_product\Entity\ProductVariation;
  * @group commerce_google_tag_manager_functional
  */
 class ProductDetailViewsTest extends CommerceBrowserTestBase {
+  use DeprecationSuppressionTrait;
 
   /**
    * The temp store holding the Enhanced Ecommerce event data.

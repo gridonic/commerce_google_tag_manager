@@ -10,6 +10,7 @@ use Drupal\commerce_order\Entity\Order;
 use Drupal\commerce_product\Entity\Product;
 use Drupal\commerce_product\Entity\ProductVariation;
 use Drupal\state_machine\Event\WorkflowTransitionEvent;
+use Drupal\Tests\commerce_google_tag_manager\Traits\DeprecationSuppressionTrait;
 
 /**
  * @coversDefaultClass \Drupal\commerce_google_tag_manager\EventSubscriber\CommerceEventsSubscriber
@@ -19,6 +20,7 @@ use Drupal\state_machine\Event\WorkflowTransitionEvent;
  * @group commerce_google_tag_manager_kernel
  */
 class OrderEventTest extends CommerceKernelTestBase {
+  use DeprecationSuppressionTrait;
 
   /**
    * Modules to enable.

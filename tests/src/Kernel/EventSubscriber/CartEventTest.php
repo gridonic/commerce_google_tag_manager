@@ -9,6 +9,7 @@ use Drupal\commerce_product\Entity\ProductVariation;
 use Drupal\commerce_cart\Event\CartEntityAddEvent;
 use Drupal\commerce_cart\Event\CartOrderItemRemoveEvent;
 use Drupal\Tests\commerce_cart\Traits\CartManagerTestTrait;
+use Drupal\Tests\commerce_google_tag_manager\Traits\DeprecationSuppressionTrait;
 
 /**
  * @coversDefaultClass \Drupal\commerce_google_tag_manager\EventSubscriber\CommerceEventsSubscriber
@@ -19,6 +20,7 @@ use Drupal\Tests\commerce_cart\Traits\CartManagerTestTrait;
  */
 class CartEventTest extends CommerceKernelTestBase {
   use CartManagerTestTrait;
+  use DeprecationSuppressionTrait;
 
   /**
    * Modules to enable.
