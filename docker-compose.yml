@@ -11,7 +11,7 @@ services:
     volumes:
       # Mount the module Commerce Google Tag Manager in the proper contrib module directory.
       - .:/var/www/html/modules/contrib/commerce_google_tag_manager
-    restart: always
+    restart: unless-stopped
 
   db:
     image: mariadb:10.3.7
@@ -20,4 +20,4 @@ services:
       MYSQL_PASSWORD: drupal
       MYSQL_DATABASE: drupal
       MYSQL_ROOT_PASSWORD: root
-    restart: always
+    restart: unless-stopped
