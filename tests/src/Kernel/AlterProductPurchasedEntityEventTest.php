@@ -7,6 +7,7 @@ use Drupal\commerce_google_tag_manager\Event\AlterProductPurchasedEntityEvent;
 use Drupal\commerce_google_tag_manager\Product;
 use Drupal\commerce_order\Entity\OrderItemInterface;
 use Drupal\commerce_product\Entity\ProductVariation;
+use Drupal\Tests\commerce_google_tag_manager\Traits\DeprecationSuppressionTrait;
 
 /**
  * @coversDefaultClass \Drupal\commerce_google_tag_manager\Event\AlterProductPurchasedEntityEvent
@@ -16,6 +17,7 @@ use Drupal\commerce_product\Entity\ProductVariation;
  * @group commerce_google_tag_manager_kernel
  */
 class AlterProductPurchasedEntityEventTest extends CommerceKernelTestBase {
+  use DeprecationSuppressionTrait;
 
   /**
    * Modules to enable.

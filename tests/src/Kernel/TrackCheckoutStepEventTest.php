@@ -9,6 +9,7 @@ use Drupal\commerce_order\Entity\Order;
 use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_product\Entity\Product;
 use Drupal\commerce_product\Entity\ProductVariation;
+use Drupal\Tests\commerce_google_tag_manager\Traits\DeprecationSuppressionTrait;
 
 /**
  * @coversDefaultClass \Drupal\commerce_google_tag_manager\Event\TrackCheckoutStepEvent
@@ -18,6 +19,7 @@ use Drupal\commerce_product\Entity\ProductVariation;
  * @group commerce_google_tag_manager_kernel
  */
 class TrackCheckoutStepEventTest extends CommerceKernelTestBase {
+  use DeprecationSuppressionTrait;
 
   /**
    * Modules to enable.

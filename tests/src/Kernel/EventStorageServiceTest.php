@@ -3,6 +3,7 @@
 namespace Drupal\Tests\commerce_google_tag_manager\Kernel;
 
 use Drupal\commerce_google_tag_manager\EventTrackerService;
+use Drupal\Tests\commerce_google_tag_manager\Traits\DeprecationSuppressionTrait;
 
 /**
  * @coversDefaultClass \Drupal\commerce_google_tag_manager\EventStorageService
@@ -12,6 +13,7 @@ use Drupal\commerce_google_tag_manager\EventTrackerService;
  * @group commerce_google_tag_manager_kernel
  */
 class EventStorageServiceTest extends CommerceKernelTestBase {
+  use DeprecationSuppressionTrait;
 
   /**
    * {@inheritdoc}

@@ -6,6 +6,7 @@ use Drupal\commerce_google_tag_manager\Event\AlterProductEvent;
 use Drupal\commerce_product\Entity\ProductVariationInterface;
 use Drupal\commerce_product\Entity\ProductVariation;
 use Drupal\commerce_google_tag_manager\Product;
+use Drupal\Tests\commerce_google_tag_manager\Traits\DeprecationSuppressionTrait;
 
 /**
  * @coversDefaultClass \Drupal\commerce_google_tag_manager\Event\AlterProductEvent
@@ -15,6 +16,7 @@ use Drupal\commerce_google_tag_manager\Product;
  * @group commerce_google_tag_manager_kernel
  */
 class AlterProductEventTest extends CommerceKernelTestBase {
+  use DeprecationSuppressionTrait;
 
   /**
    * Modules to enable.
