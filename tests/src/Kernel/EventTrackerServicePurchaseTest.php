@@ -90,7 +90,7 @@ class EventTrackerServicePurchaseTest extends CommerceKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->installEntitySchema('profile');
     $this->installSchema('system', ['key_value_expire']);

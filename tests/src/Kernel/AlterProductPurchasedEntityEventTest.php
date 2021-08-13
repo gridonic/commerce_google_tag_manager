@@ -51,7 +51,7 @@ class AlterProductPurchasedEntityEventTest extends CommerceKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // The purchased entity to test with.

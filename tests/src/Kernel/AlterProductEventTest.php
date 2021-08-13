@@ -43,7 +43,7 @@ class AlterProductEventTest extends CommerceKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // The variations to test with.

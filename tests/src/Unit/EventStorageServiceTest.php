@@ -60,7 +60,7 @@ class EventStorageServiceTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  protected function setUp() {
     parent::setUp();
 
     $this->tempStore       = $this->getMockBuilder(PrivateTempStoreFactory::class)

@@ -46,7 +46,7 @@ class EventTrackerServiceTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  protected function setUp() {
     parent::setUp();
 
     $this->eventStorage = $this->getMockBuilder(EventStorageService::class)
