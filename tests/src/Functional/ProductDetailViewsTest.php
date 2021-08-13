@@ -42,7 +42,7 @@ class ProductDetailViewsTest extends CommerceBrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->tempStore = $this->container->get('tempstore.private')->get('commerce_google_tag_manager');
